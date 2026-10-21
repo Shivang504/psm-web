@@ -19,9 +19,9 @@ export function Button({
 }: ButtonProps) {
   const variants = {
     primary:
-      'bg-[#4f46e5] text-white shadow-[0_12px_24px_-14px_rgba(79,70,229,0.9)] hover:bg-[#4338ca]',
+      'bg-primary text-primary-foreground shadow-primary hover:bg-primary-hover',
     ghost:
-      'bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-slate-50 hover:ring-slate-300',
+      'bg-background-surface text-secondary ring-1 ring-border hover:bg-secondary-soft hover:ring-border-strong',
   }
 
   const sizes = {

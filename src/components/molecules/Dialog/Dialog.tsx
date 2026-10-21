@@ -47,7 +47,7 @@ export function Dialog({
       <button
         type="button"
         aria-label="Close dialog"
-        className="absolute inset-0 bg-slate-950/45"
+        className="absolute inset-0 bg-background-overlay/45"
         onClick={() => {
           if (closeOnOutsideClick) onClose()
         }}
@@ -57,14 +57,14 @@ export function Dialog({
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? 'dialog-title' : undefined}
-        className="relative z-10 w-full max-w-md rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_24px_60px_-28px_rgba(42,37,120,0.55)]"
+        className="relative z-10 w-full max-w-md rounded-2xl border border-border bg-background-surface p-6 shadow-dialog"
       >
         {closeOnOutsideClick ? (
           <button
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="absolute top-3 right-3 inline-flex size-8 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+            className="absolute top-3 right-3 inline-flex size-8 items-center justify-center rounded-lg text-text-faint transition hover:bg-border-subtle hover:text-secondary"
           >
             <X className="size-4" />
           </button>
@@ -73,13 +73,15 @@ export function Dialog({
         {title ? (
           <h2
             id="dialog-title"
-            className="pr-8 text-lg font-semibold text-slate-950"
+            className="pr-8 text-lg font-semibold text-text-strong"
           >
             {title}
           </h2>
         ) : null}
 
-        <div className={title ? 'mt-3 text-sm leading-6 text-slate-600' : ''}>
+        <div
+          className={title ? 'mt-3 text-sm leading-6 text-text-secondary' : ''}
+        >
           {children}
         </div>
 

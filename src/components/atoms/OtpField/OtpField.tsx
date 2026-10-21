@@ -115,9 +115,9 @@ export function OtpField<T extends FieldValues>({
         return (
           <div className="w-full">
             {label && (
-              <label className="mb-3 block text-sm font-medium tracking-wide text-slate-700">
+              <label className="mb-3 block text-sm font-medium tracking-wide text-secondary">
                 {label}
-                {isRequired && <span className="text-rose-500"> *</span>}
+                {isRequired && <span className="text-error"> *</span>}
               </label>
             )}
 
@@ -138,19 +138,19 @@ export function OtpField<T extends FieldValues>({
                   onKeyDown={(event) => handleKeyDown(event, index)}
                   onPaste={(event) => handlePaste(event, index)}
                   onFocus={(event) => event.currentTarget.select()}
-                  className={`h-12 w-full min-w-0 rounded-xl border bg-white text-center text-lg font-semibold text-slate-900 transition duration-200 outline-none sm:h-14 sm:text-xl ${
-                    digit ? 'border-[#4f46e5]' : 'border-slate-200'
+                  className={`h-12 w-full min-w-0 rounded-xl border bg-background-surface text-center text-lg font-semibold text-text transition duration-200 outline-none sm:h-14 sm:text-xl ${
+                    digit ? 'border-primary' : 'border-border'
                   } ${
                     fieldState.error
-                      ? 'border-rose-400 focus:border-rose-400 focus:ring-4 focus:ring-rose-100'
-                      : 'hover:border-slate-300 focus:border-[#4f46e5] focus:ring-4 focus:ring-[#4f46e5]/15'
-                  } disabled:cursor-not-allowed disabled:bg-slate-50`}
+                      ? 'border-error-border focus:border-error-border focus:ring-4 focus:ring-error-ring'
+                      : 'hover:border-border-strong focus:border-primary focus:ring-4 focus:ring-primary/15'
+                  } disabled:cursor-not-allowed disabled:bg-background-muted`}
                 />
               ))}
             </div>
 
             {fieldState.error && (
-              <p className="mt-2 text-xs text-rose-500">
+              <p className="mt-2 text-xs text-error">
                 {fieldState.error.message}
               </p>
             )}

@@ -152,9 +152,9 @@ const USERS: AdminUser[] = [
 ]
 
 const statusStyles: Record<UserStatus, string> = {
-  Active: 'bg-emerald-50 text-emerald-700 ring-emerald-200',
-  Invited: 'bg-indigo-50 text-[#4f46e5] ring-indigo-200',
-  Suspended: 'bg-rose-50 text-rose-700 ring-rose-200',
+  Active: 'bg-success-soft text-success ring-success-border',
+  Invited: 'bg-primary-soft text-primary ring-primary-border',
+  Suspended: 'bg-error-soft text-error-strong ring-error-muted',
 }
 
 function StatusBadge({ status }: { status: UserStatus }) {
@@ -293,20 +293,20 @@ function UserDetail({
   onClose: () => void
 }) {
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_18px_40px_-32px_rgba(42,37,120,0.55)]">
+    <section className="rounded-2xl border border-border bg-background-surface p-5 shadow-card">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-semibold tracking-[0.14em] text-[#4f46e5] uppercase">
+          <p className="text-xs font-semibold tracking-[0.14em] text-primary uppercase">
             Profile
           </p>
-          <h2 className="mt-1 text-lg font-semibold text-slate-950">
+          <h2 className="mt-1 text-lg font-semibold text-text-strong">
             {user.name}
           </h2>
         </div>
         <button
           type="button"
           onClick={onClose}
-          className="rounded-lg px-2 py-1 text-xs font-semibold text-slate-500 hover:bg-slate-100 hover:text-slate-800"
+          className="rounded-lg px-2 py-1 text-xs font-semibold text-text-muted hover:bg-border-subtle hover:text-text-emphasis"
         >
           Close
         </button>
@@ -327,9 +327,9 @@ function UserDetail({
 
 function DetailRow({ label, value }: { label: string; value: ReactNode }) {
   return (
-    <div className="flex items-center justify-between gap-3 border-b border-slate-100 pb-3 last:border-0">
-      <dt className="text-slate-500">{label}</dt>
-      <dd className="font-medium text-slate-800">{value}</dd>
+    <div className="flex items-center justify-between gap-3 border-b border-border-subtle pb-3 last:border-0">
+      <dt className="text-text-muted">{label}</dt>
+      <dd className="font-medium text-text-emphasis">{value}</dd>
     </div>
   )
 }

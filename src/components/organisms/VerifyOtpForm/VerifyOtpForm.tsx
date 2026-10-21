@@ -112,13 +112,13 @@ export function VerifyOtpForm({
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleFormSubmit} noValidate>
-        <p className="text-sm font-semibold text-[#4f46e5]">Verification</p>
-        <h1 className="mt-2 text-[34px] leading-tight font-semibold tracking-tight text-slate-950">
+        <p className="text-sm font-semibold text-primary">Verification</p>
+        <h1 className="mt-2 text-[34px] leading-tight font-semibold tracking-tight text-text-strong">
           Check your phone
         </h1>
-        <p className="mt-2 text-sm leading-6 text-slate-500">
+        <p className="mt-2 text-sm leading-6 text-text-muted">
           Enter the 6-digit code sent to{' '}
-          <span className="font-medium text-slate-800">
+          <span className="font-medium text-text-emphasis">
             {mobile || 'your mobile number'}
           </span>
           .
@@ -132,13 +132,13 @@ export function VerifyOtpForm({
           />
         </div>
 
-        <p className="mt-4 text-sm text-slate-500">
+        <p className="mt-4 text-sm text-text-muted">
           Didn’t receive the code?{' '}
           <button
             type="button"
             onClick={handleResend}
             disabled={secondsLeft > 0 || loading || resending}
-            className="font-semibold text-[#4f46e5] transition hover:text-[#4338ca] disabled:cursor-default disabled:text-slate-400"
+            className="font-semibold text-primary transition hover:text-primary-hover disabled:cursor-default disabled:text-text-faint"
           >
             {resending ? 'Sending code' : 'Resend code'}
           </button>
@@ -157,7 +157,7 @@ export function VerifyOtpForm({
 
         <Link
           to="/login"
-          className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 transition hover:text-[#4f46e5]"
+          className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-text-secondary transition hover:text-primary"
         >
           <ArrowLeft className="size-4" />
           Back to login

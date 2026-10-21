@@ -150,7 +150,7 @@ export function TableLayout<T>({
             <div className="flex min-w-0 flex-1 flex-col gap-3 sm:flex-row sm:items-center">
               {onSearchChange ? (
                 <div className="relative w-full sm:max-w-xs">
-                  <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                  <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-text-faint">
                     <Search className="size-4" />
                   </span>
                   <input
@@ -158,7 +158,7 @@ export function TableLayout<T>({
                     value={searchTerm}
                     onChange={(event) => onSearchChange(event.target.value)}
                     placeholder={searchPlaceholder}
-                    className="h-10 w-full rounded-xl border border-slate-200 bg-white pr-4 pl-10 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-[#4f46e5] focus:ring-4 focus:ring-[#4f46e5]/15"
+                    className="h-10 w-full rounded-xl border border-border bg-background-surface pr-4 pl-10 text-sm text-text-emphasis outline-none transition placeholder:text-text-faint hover:border-border-strong focus:border-primary focus:ring-4 focus:ring-primary/15"
                   />
                 </div>
               ) : null}
@@ -199,8 +199,8 @@ export function TableLayout<T>({
             ) : null}
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_18px_40px_-32px_rgba(42,37,120,0.55)]">
-            <p className="px-4 pt-3 text-[10px] font-semibold tracking-[0.14em] text-slate-400 uppercase sm:hidden">
+          <div className="overflow-hidden rounded-2xl border border-border bg-background-surface shadow-card">
+            <p className="px-4 pt-3 text-[10px] font-semibold tracking-[0.14em] text-text-faint uppercase sm:hidden">
               Swipe to explore
             </p>
 
@@ -210,8 +210,8 @@ export function TableLayout<T>({
               }`}
             >
               <Table>
-                <TableHeader className="bg-slate-50/80">
-                  <TableRow className="border-b border-slate-200">
+                <TableHeader className="bg-background-muted/80">
+                  <TableRow className="border-b border-border">
                     {columns.map((column) => {
                       const sortField = column.sortKey ?? String(column.key)
                       const isActive = sortBy === sortField
@@ -224,9 +224,9 @@ export function TableLayout<T>({
                               ? () => onSort(sortField)
                               : undefined
                           }
-                          className={`text-[11px] font-semibold tracking-[0.08em] text-slate-500 uppercase ${
+                          className={`text-[11px] font-semibold tracking-[0.08em] text-text-muted uppercase ${
                             column.sortable
-                              ? 'cursor-pointer select-none hover:text-[#4f46e5]'
+                              ? 'cursor-pointer select-none hover:text-primary'
                               : ''
                           }`}
                         >
@@ -237,15 +237,15 @@ export function TableLayout<T>({
                                 <ChevronUp
                                   className={`size-3 ${
                                     isActive && sortOrder === 'asc'
-                                      ? 'text-[#4f46e5]'
-                                      : 'text-slate-300'
+                                      ? 'text-primary'
+                                      : 'text-text-disabled'
                                   }`}
                                 />
                                 <ChevronDown
                                   className={`size-3 ${
                                     isActive && sortOrder === 'desc'
-                                      ? 'text-[#4f46e5]'
-                                      : 'text-slate-300'
+                                      ? 'text-primary'
+                                      : 'text-text-disabled'
                                   }`}
                                 />
                               </span>
@@ -255,7 +255,7 @@ export function TableLayout<T>({
                       )
                     })}
                     {actions.length > 0 ? (
-                      <TableHead className="text-right text-[11px] font-semibold tracking-[0.08em] text-slate-500 uppercase">
+                      <TableHead className="text-right text-[11px] font-semibold tracking-[0.08em] text-text-muted uppercase">
                         Actions
                       </TableHead>
                     ) : null}
@@ -267,7 +267,7 @@ export function TableLayout<T>({
                     Array.from({ length: skeletonRowCount }).map((_, index) => (
                       <TableRow
                         key={index}
-                        className="border-b border-slate-100"
+                        className="border-b border-border-subtle"
                       >
                         {columns.map((column) => (
                           <TableCell key={String(column.key)}>
@@ -296,18 +296,18 @@ export function TableLayout<T>({
                           onClick={
                             onRowClick ? () => onRowClick(row) : undefined
                           }
-                          className={`border-b border-slate-100 last:border-0 ${
+                          className={`border-b border-border-subtle last:border-0 ${
                             onRowClick ? 'cursor-pointer' : ''
                           } ${
                             isSelected
-                              ? 'bg-indigo-50'
-                              : 'hover:bg-indigo-50/70'
+                              ? 'bg-primary-soft'
+                              : 'hover:bg-primary-soft/70'
                           }`}
                         >
                           {columns.map((column) => (
                             <TableCell
                               key={String(column.key)}
-                              className={`text-sm font-medium text-slate-700 ${
+                              className={`text-sm font-medium text-secondary ${
                                 column.isNowrap ? 'whitespace-nowrap' : ''
                               }`}
                             >
@@ -341,7 +341,7 @@ export function TableLayout<T>({
                                       aria-label={action.label}
                                       disabled={isDisabled}
                                       onClick={() => action.onClick(row)}
-                                      className="inline-flex size-8 items-center justify-center rounded-lg text-slate-500 transition hover:bg-indigo-50 hover:text-[#4f46e5] disabled:cursor-not-allowed disabled:opacity-40"
+                                      className="inline-flex size-8 items-center justify-center rounded-lg text-text-muted transition hover:bg-primary-soft hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
                                     >
                                       {renderActionIcon(action.icon)}
                                     </button>
@@ -357,7 +357,7 @@ export function TableLayout<T>({
                     <TableRow>
                       <TableCell
                         colSpan={columns.length + (actions.length > 0 ? 1 : 0)}
-                        className="py-12 text-center text-sm text-slate-500"
+                        className="py-12 text-center text-sm text-text-muted"
                       >
                         {emptyMessage}
                       </TableCell>

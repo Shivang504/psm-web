@@ -53,14 +53,14 @@ export function InputField<T extends FieldValues>({
 
   const themeStyles = {
     dark: {
-      label: 'text-color-primary/70 text-sm',
+      label: 'text-primary-foreground/70 text-sm',
       input:
-        'border-background/40 text-background placeholder:text-background/20 border-[0.5px] bg-transparent placeholder:text-[16px]',
+        'border-primary-foreground/40 text-primary-foreground placeholder:text-primary-foreground/20 border-[0.5px] bg-transparent placeholder:text-[16px]',
     },
     light: {
-      label: 'text-[13px] font-medium text-slate-600',
+      label: 'text-[13px] font-medium text-text-secondary',
       input:
-        'border-slate-200 bg-white text-slate-800 placeholder:text-slate-400 hover:border-slate-300',
+        'border-border bg-background-surface text-text-emphasis placeholder:text-text-faint hover:border-border-strong',
     },
   }
 
@@ -77,7 +77,7 @@ export function InputField<T extends FieldValues>({
               htmlFor={fieldId}
               className={`mb-2 block tracking-wide ${currentTheme.label}`}
             >
-              {label} {isRequired && <span className="text-rose-500">*</span>}
+              {label} {isRequired && <span className="text-error">*</span>}
             </label>
           )}
 
@@ -91,7 +91,7 @@ export function InputField<T extends FieldValues>({
             )}
 
             {startIcon ? (
-              <span className="pointer-events-none absolute left-3.5 text-slate-400">
+              <span className="pointer-events-none absolute left-3.5 text-text-faint">
                 {startIcon}
               </span>
             ) : null}
@@ -127,17 +127,17 @@ export function InputField<T extends FieldValues>({
                 isbgColor ? 'bg-transparent' : ''
               } ${
                 disabled
-                  ? 'cursor-not-allowed border-slate-200 bg-slate-50 text-slate-400'
+                  ? 'cursor-not-allowed border-border bg-background-muted text-text-faint'
                   : ''
               } ${type === 'password' || suffix ? 'pr-12' : ''} ${currentTheme.input} ${
                 fieldState.error
-                  ? 'border-rose-400 focus:border-rose-400 focus:ring-4 focus:ring-rose-100'
-                  : 'focus:border-[#4f46e5] focus:ring-4 focus:ring-[#4f46e5]/15'
+                  ? 'border-error-border focus:border-error-border focus:ring-4 focus:ring-error-ring'
+                  : 'focus:border-primary focus:ring-4 focus:ring-primary/15'
               }`}
             />
 
             {suffix ? (
-              <span className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-sm text-slate-400">
+              <span className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 text-sm text-text-faint">
                 {suffix}
               </span>
             ) : null}
@@ -147,7 +147,7 @@ export function InputField<T extends FieldValues>({
                 type="button"
                 aria-label={showPassword ? 'Hide password' : 'Show password'}
                 onClick={() => setShowPassword((prev) => !prev)}
-                className="absolute top-1/2 right-3 -translate-y-1/2 rounded-lg p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+                className="absolute top-1/2 right-3 -translate-y-1/2 rounded-lg p-1 text-text-faint transition hover:bg-border-subtle hover:text-secondary"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
@@ -155,11 +155,11 @@ export function InputField<T extends FieldValues>({
           </div>
 
           {fieldState.error ? (
-            <p className="mt-2 text-xs text-rose-500">
+            <p className="mt-2 text-xs text-error">
               {fieldState.error.message}
             </p>
           ) : hint ? (
-            <p className="mt-2 text-xs text-slate-500">{hint}</p>
+            <p className="mt-2 text-xs text-text-muted">{hint}</p>
           ) : null}
         </div>
       )}

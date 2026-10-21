@@ -33,8 +33,8 @@ export function AdminLayout({ title, subtitle, children }: AdminLayoutProps) {
   }
 
   return (
-    <div className="flex min-h-svh bg-[#f6f7fb] text-slate-900">
-      <aside className="sticky top-0 hidden h-svh w-64 shrink-0 flex-col bg-[linear-gradient(165deg,#2a2578_0%,#4f46e5_52%,#7c73f6_100%)] text-white lg:flex">
+    <div className="flex min-h-svh bg-background text-text">
+      <aside className="sticky top-0 hidden h-svh w-64 shrink-0 flex-col bg-primary-gradient text-primary-foreground lg:flex">
         <SidebarBody mobile={mobile} onSignOut={handleSignOut} />
       </aside>
 
@@ -43,15 +43,15 @@ export function AdminLayout({ title, subtitle, children }: AdminLayoutProps) {
           <button
             type="button"
             aria-label="Close menu"
-            className="absolute inset-0 bg-slate-950/45"
+            className="absolute inset-0 bg-background-overlay/45"
             onClick={() => setMenuOpen(false)}
           />
-          <aside className="relative flex h-full w-72 flex-col bg-[linear-gradient(165deg,#2a2578_0%,#4f46e5_52%,#7c73f6_100%)] text-white shadow-2xl">
+          <aside className="relative flex h-full w-72 flex-col bg-primary-gradient text-primary-foreground shadow-2xl">
             <button
               type="button"
               aria-label="Close menu"
               onClick={() => setMenuOpen(false)}
-              className="absolute top-4 right-4 inline-flex size-8 items-center justify-center rounded-lg text-white/80 hover:bg-white/10"
+              className="absolute top-4 right-4 inline-flex size-8 items-center justify-center rounded-lg text-primary-foreground/80 hover:bg-primary-foreground/10"
             >
               <X className="size-4" />
             </button>
@@ -65,21 +65,21 @@ export function AdminLayout({ title, subtitle, children }: AdminLayoutProps) {
       ) : null}
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-slate-200/80 bg-white/90 px-4 py-4 backdrop-blur sm:px-6">
+        <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-border/80 bg-background-surface/90 px-4 py-4 backdrop-blur sm:px-6">
           <button
             type="button"
             aria-label="Open menu"
             onClick={() => setMenuOpen(true)}
-            className="inline-flex size-9 items-center justify-center rounded-xl text-slate-600 ring-1 ring-slate-200 lg:hidden"
+            className="inline-flex size-9 items-center justify-center rounded-xl text-text-secondary ring-1 ring-border lg:hidden"
           >
             <Menu className="size-4" />
           </button>
           <div className="min-w-0">
-            <h1 className="truncate text-lg font-semibold tracking-tight text-slate-950">
+            <h1 className="truncate text-lg font-semibold tracking-tight text-text-strong">
               {title}
             </h1>
             {subtitle ? (
-              <p className="truncate text-sm text-slate-500">{subtitle}</p>
+              <p className="truncate text-sm text-text-muted">{subtitle}</p>
             ) : null}
           </div>
         </header>
@@ -102,10 +102,12 @@ function SidebarBody({
   return (
     <>
       <div className="flex items-center gap-3 px-5 pt-6 pb-6">
-        <BrandMark className="size-10 rounded-2xl shadow-lg shadow-indigo-950/30" />
+        <BrandMark className="size-10 rounded-2xl shadow-lg shadow-primary-deep/30" />
         <div>
           <p className="text-[15px] font-semibold tracking-tight">Admin</p>
-          <p className="text-xs text-white/70">Manage · Monitor · Grow</p>
+          <p className="text-xs text-primary-foreground/70">
+            Manage · Monitor · Grow
+          </p>
         </div>
       </div>
 
@@ -121,8 +123,8 @@ function SidebarBody({
               className={({ isActive }) =>
                 `flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
                   isActive
-                    ? 'bg-white/15 text-white ring-1 ring-white/25'
-                    : 'text-white/75 hover:bg-white/10 hover:text-white'
+                    ? 'bg-primary-foreground/15 text-primary-foreground ring-1 ring-primary-foreground/25'
+                    : 'text-primary-foreground/75 hover:bg-primary-foreground/10 hover:text-primary-foreground'
                 }`
               }
             >
@@ -133,14 +135,14 @@ function SidebarBody({
         })}
       </nav>
 
-      <div className="mt-auto border-t border-white/15 p-4">
-        <p className="truncate text-xs text-white/70">
+      <div className="mt-auto border-t border-primary-foreground/15 p-4">
+        <p className="truncate text-xs text-primary-foreground/70">
           {mobile ? `Signed in · ${mobile}` : 'Signed in'}
         </p>
         <button
           type="button"
           onClick={onSignOut}
-          className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-white/15 px-3 py-2 text-sm font-semibold ring-1 ring-white/25 transition hover:bg-white/25"
+          className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary-foreground/15 px-3 py-2 text-sm font-semibold ring-1 ring-primary-foreground/25 transition hover:bg-primary-foreground/25"
         >
           <LogOut className="size-4" />
           Sign out

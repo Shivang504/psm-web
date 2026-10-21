@@ -43,11 +43,11 @@ export default function LoginPage() {
   return (
     <AuthLayout variant="login">
       <div className="mx-auto w-full min-w-0 max-w-[420px]">
-        <p className="text-sm font-semibold text-[#4f46e5]">Sign in</p>
-        <h1 className="mt-2 text-[34px] leading-tight font-semibold tracking-tight text-slate-950">
+        <p className="text-sm font-semibold text-primary">Sign in</p>
+        <h1 className="mt-2 text-[34px] leading-tight font-semibold tracking-tight text-text-strong">
           Welcome back
         </h1>
-        <p className="mt-2 text-sm leading-6 text-slate-500">
+        <p className="mt-2 text-sm leading-6 text-text-muted">
           Enter your mobile number. We will send a one-time code to continue.
         </p>
         <div className="mt-8">
