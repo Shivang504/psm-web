@@ -1,0 +1,54 @@
+import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios'
+import { clearAuthSession, getAccessToken } from '../utils/auth'
+import type { ApiResponse } from '../utils/types'
+
+declare module 'axios' {
+  export interface AxiosRequestConfig {
+    isPublic?: boolean
+  }
+}
+
+const baseURL = (import.meta.env.REACT_APP_BASE_URL ?? '')
+  .trim()
+  .replace(/\/$/, '')
+
+export const apiClient = axios.create({
+  baseURL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+})
+
+apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
+  if (!baseURL) {
+    return Promise.reject(new Error('REACT_APP_BASE_URL is not configured'))
+  }
+
+  if (!config.isPublic) {
+    const token = getAccessToken()
+
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+  }
+
+  return config
+})
+
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error: AxiosError<ApiResponse<unknown>>) => {
+    const status = error.response?.status
+    const isPublic = error.config?.isPublic
+
+    if (status === 401 && !isPublic) {
+      clearAuthSession()
+
+      if (window.location.pathname !== '/login') {
+        window.location.assign('/login')
+      }
+    }
+
+    return Promise.reject(error)
+  },
+)

@@ -1,0 +1,12 @@
+pre-commit:
+  parallel: false
+  commands:
+    format:
+      glob: '*.{ts,tsx,js,jsx,css,json,md,html,yml,yaml}'
+      run: pnpm exec prettier --write {staged_files}
+      stage_fixed: true
+    lint:
+      glob: '*.{ts,tsx}'
+      run: pnpm exec eslint --max-warnings=0 {staged_files}
+    typecheck:
+      run: pnpm exec tsc -b --pretty false
