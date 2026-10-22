@@ -1,8 +1,9 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AuthGuard, GuestGuard } from './components/AuthGuard'
-import HomePage from './pages/HomePage.tsx'
-import LoginPage from './pages/LoginPage.tsx'
-import VerifyOtpPage from './pages/VerifyOtpPage.tsx'
+import EmployeeFormPage from './pages/employee/EmployeeFormPage.tsx'
+import HomePage from './pages/employee/EmployeeList.tsx'
+import LoginPage from './pages/auth/LoginPage.tsx'
+import VerifyOtpPage from './pages/auth/VerifyOtpPage.tsx'
 import { useAppSelector } from './store/hooks'
 
 function RootRedirect() {
@@ -37,6 +38,22 @@ function App() {
           element={
             <AuthGuard>
               <HomePage />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/home/new"
+          element={
+            <AuthGuard>
+              <EmployeeFormPage />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/home/:id/edit"
+          element={
+            <AuthGuard>
+              <EmployeeFormPage />
             </AuthGuard>
           }
         />

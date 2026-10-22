@@ -29,6 +29,7 @@ apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
+      config.headers['x-auth-token'] = token
     }
   }
 

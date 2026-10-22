@@ -1,6 +1,7 @@
 const ACCESS_TOKEN_KEY = 'access_token'
 const REFRESH_TOKEN_KEY = 'refresh_token'
 const MOBILE_KEY = 'auth_mobile'
+const ROLE_ID_KEY = 'role_id'
 const PENDING_MOBILE_KEY = 'pending_mobile'
 
 export interface AuthSession {
@@ -19,6 +20,14 @@ export function getRefreshToken(): string | null {
 
 export function getStoredMobile(): string | null {
   return localStorage.getItem(MOBILE_KEY)
+}
+
+export function getStoredRoleId(): string | null {
+  return localStorage.getItem(ROLE_ID_KEY)
+}
+
+export function setStoredRoleId(roleId: string): void {
+  localStorage.setItem(ROLE_ID_KEY, roleId)
 }
 
 export function getPendingMobile(): string | null {
@@ -50,6 +59,7 @@ export function clearAuthSession(): void {
   localStorage.removeItem(ACCESS_TOKEN_KEY)
   localStorage.removeItem(REFRESH_TOKEN_KEY)
   localStorage.removeItem(MOBILE_KEY)
+  localStorage.removeItem(ROLE_ID_KEY)
   clearPendingMobile()
 }
 

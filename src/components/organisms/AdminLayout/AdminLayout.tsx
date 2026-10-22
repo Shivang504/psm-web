@@ -1,10 +1,17 @@
 import { LogOut, Menu, Users, X, type LucideIcon } from 'lucide-react'
-import { useState, type ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { BrandMark } from '../../atoms/BrandMark'
+import { sagaActions } from '../../../store/actions'
 import { logout } from '../../../store/slices/authSlice'
+import {
+  fetchProfile,
+  fetchProfileFailure,
+  fetchProfileSuccess,
+} from '../../../store/slices/profileSlice'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import { clearAuthSession } from '../../../utils/auth'
+import { clearAuthSession, setStoredRoleId } from '../../../utils/auth'
+import type { ProfileResponse } from '../../../utils/types'
 
 type AdminLayoutProps = {
   title: string
@@ -18,13 +25,46 @@ type NavItem = {
   icon: LucideIcon
 }
 
-const navItems: NavItem[] = [{ label: 'Users', to: '/home', icon: Users }]
+const navItems: NavItem[] = [
+  { label: 'Employee list', to: '/home', icon: Users },
+]
 
 export function AdminLayout({ title, subtitle, children }: AdminLayoutProps) {
   const [menuOpen, setMenuOpen] = useState(false)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const mobile = useAppSelector((state) => state.auth.mobile)
+  const roleId = useAppSelector((state) => state.profile.roleId)
+  const profileLoading = useAppSelector((state) => state.profile.loading)
+  const profileError = useAppSelector((state) => state.profile.error)
+
+  useEffect(() => {
+    if (roleId || profileLoading || profileError) return
+
+    dispatch(fetchProfile())
+    dispatch({
+      type: sagaActions.GET_PROFILE,
+      payload: {
+        query: '/profile',
+        method: 'GET',
+        onSuccess: (response: ProfileResponse) => {
+          const profile = response.data?.profile
+          const nextRoleId = profile?.role_id?.trim() ?? ''
+
+          if (!profile || !nextRoleId) {
+            dispatch(fetchProfileFailure('Profile did not include a role.'))
+            return
+          }
+
+          setStoredRoleId(nextRoleId)
+          dispatch(fetchProfileSuccess({ profile, roleId: nextRoleId }))
+        },
+        onFailure: (message: string) => {
+          dispatch(fetchProfileFailure(message))
+        },
+      },
+    })
+  }, [dispatch, profileError, profileLoading, roleId])
 
   const handleSignOut = () => {
     clearAuthSession()

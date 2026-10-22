@@ -1,5 +1,6 @@
 export { BrandMark } from './BrandMark'
 export { Button } from './Button'
 export { InputField } from './InputField'
+export { SelectField } from './SelectField'
 export { OtpField } from './OtpField'
 export { Skeleton } from './Skeleton'

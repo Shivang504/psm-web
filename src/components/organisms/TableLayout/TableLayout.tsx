@@ -66,6 +66,7 @@ type TableLayoutProps<T> = {
   onPageChange?: (page: number) => void
   onPageSizeChange?: (size: number) => void
   dialogTitle?: string
+  dialogLabel?: string
   dialogOpen?: boolean
   setDialogOpen?: () => void
   dialogLoading?: boolean
@@ -124,6 +125,7 @@ export function TableLayout<T>({
   onPageChange,
   onPageSizeChange,
   dialogTitle,
+  dialogLabel,
   dialogOpen = false,
   dialogLoading = false,
   handleOnclick,
@@ -391,6 +393,7 @@ export function TableLayout<T>({
         loading={dialogLoading}
         onClose={setDialogOpen ?? (() => {})}
         handleSubmit={handleOnclick}
+        label={dialogLabel}
       >
         {dialogDescription}
       </Dialog>
