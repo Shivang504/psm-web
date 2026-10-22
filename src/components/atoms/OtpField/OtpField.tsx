@@ -138,13 +138,15 @@ export function OtpField<T extends FieldValues>({
                   onKeyDown={(event) => handleKeyDown(event, index)}
                   onPaste={(event) => handlePaste(event, index)}
                   onFocus={(event) => event.currentTarget.select()}
-                  className={`h-12 w-full min-w-0 rounded-xl border bg-background-surface text-center text-lg font-semibold text-text transition duration-200 outline-none sm:h-14 sm:text-xl ${
-                    digit ? 'border-primary' : 'border-border'
+                  className={`h-[48px] sm:h-[54px] w-full min-w-0 rounded-[14px] border text-center text-lg sm:text-xl font-bold transition duration-150 outline-none backdrop-blur-sm ${
+                    digit
+                      ? 'border-[#4F46E5]/60 bg-white text-[#1E1B4B] shadow-xs'
+                      : 'border-white/85 bg-white/70 text-[#1E1B4B] hover:bg-white/85'
                   } ${
                     fieldState.error
-                      ? 'border-error-border focus:border-error-border focus:ring-4 focus:ring-error-ring'
-                      : 'hover:border-border-strong focus:border-primary focus:ring-4 focus:ring-primary/15'
-                  } disabled:cursor-not-allowed disabled:bg-background-muted`}
+                      ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100'
+                      : 'focus:border-[#4F46E5] focus:bg-white focus:ring-2 focus:ring-[#4F46E5]/20'
+                  } disabled:cursor-not-allowed disabled:opacity-50`}
                 />
               ))}
             </div>

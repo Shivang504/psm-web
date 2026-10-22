@@ -67,18 +67,19 @@ export function SelectField<T extends FieldValues>({
       empty: 'text-primary-foreground/50',
     },
     light: {
-      label: 'text-[13px] font-medium text-text-secondary',
+      label: 'text-[13px] font-semibold text-[#1E1B4B]',
       trigger:
-        'border-border bg-background-surface text-text-emphasis hover:border-border-strong',
-      value: 'text-text-emphasis',
-      placeholder: 'text-text-faint',
-      icon: 'text-text-faint',
-      menu: 'border-border bg-background-surface text-text-emphasis shadow-card',
+        'border border-white/85 bg-white/70 text-[#1E1B4B] backdrop-blur-sm hover:bg-white/85',
+      value: 'text-[#1E1B4B]',
+      placeholder: 'text-[#4C4A7A]/60',
+      icon: 'text-[#4C4A7A]',
+      menu: 'glass-dropdown p-1.5 shadow-[0_12px_36px_rgba(30,27,75,0.16)]',
       search:
-        'border-border bg-background-surface text-text-emphasis placeholder:text-text-faint',
-      option: 'text-text-emphasis hover:bg-primary-soft',
-      optionSelected: 'bg-primary-soft font-semibold text-primary',
-      empty: 'text-text-muted',
+        'border-b border-[rgba(79,70,229,0.12)] bg-white/50 text-[#1E1B4B] placeholder:text-[#4C4A7A]/60 rounded-t-[10px]',
+      option:
+        'text-[#1E1B4B] hover:bg-[#EEF2FF] hover:text-[#3730A3] rounded-[8px]',
+      optionSelected: 'bg-[#4F46E5] text-white font-semibold rounded-[8px]',
+      empty: 'text-[#4C4A7A]',
     },
   }
 
@@ -156,12 +157,10 @@ export function SelectField<T extends FieldValues>({
                 setOpen((current) => !current)
                 setSearch('')
               }}
-              className={`flex h-12 w-full items-center justify-between gap-3 rounded-xl border px-4 text-left text-sm outline-none transition duration-200 disabled:cursor-not-allowed disabled:border-border disabled:bg-background-muted disabled:text-text-faint ${currentTheme.trigger} ${
-                open ? 'border-primary ring-4 ring-primary/15' : ''
+              className={`flex h-[44px] w-full cursor-pointer items-center justify-between gap-3 rounded-[14px] border px-4 text-left text-[13px] outline-none transition duration-150 disabled:cursor-not-allowed disabled:opacity-50 ${currentTheme.trigger} ${
+                open ? 'border-[#4F46E5] ring-2 ring-[#4F46E5]/15' : ''
               } ${
-                fieldState.error
-                  ? 'border-error-border ring-4 ring-error-ring'
-                  : ''
+                fieldState.error ? 'border-red-400 ring-2 ring-red-100' : ''
               }`}
             >
               <span

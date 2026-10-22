@@ -1,7 +1,9 @@
+import { ArrowLeft } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Skeleton } from '../../components/atoms/Skeleton'
+import { PageHeader } from '../../components/layout/PageHeader'
 import { AdminLayout } from '../../components/organisms/AdminLayout'
 import { EmployeeForm } from '../../components/organisms/EmployeeForm'
 import { sagaActions } from '../../store/actions'
@@ -52,6 +54,7 @@ import type {
   UserListQuery,
   UserListResponse,
 } from '../../utils/types'
+import { displayName } from '../../utils/helper'
 
 function toFormValues(
   user: UserListItem,
@@ -361,42 +364,81 @@ export default function EmployeeFormPage() {
   }
 
   return (
-    <AdminLayout title={isEdit ? 'Edit employee' : 'Create employee'}>
-      {editingError || designationsError ? (
-        <p className="mb-3 text-sm text-error">
-          {editingError || designationsError}
-        </p>
-      ) : null}
-
-      {canShowForm ? (
-        <EmployeeForm
-          key={
-            isEdit ? `${editingUser?.id}-${editingUser?.designation}` : 'create'
+    <AdminLayout hideHeader={true}>
+      <div className="flex flex-1 min-h-0 flex-col gap-4 overflow-hidden">
+        {/* Page Header */}
+        <PageHeader
+          title={isEdit ? 'Edit employee' : 'Create employee'}
+          subtitle={
+            isEdit
+              ? `Update details and assignments for ${
+                  editingUser ? displayName(editingUser) : 'this employee'
+                }`
+              : 'Add a new employee to the team'
           }
-          designations={designations}
-          locationOptions={formOptions.locationOptions}
-          stateOptions={formOptions.stateOptions}
-          regionOptions={formOptions.regionOptions}
-          territoryOptions={formOptions.territoryOptions}
-          saving={saving}
-          error={saveError}
-          isEdit={isEdit}
-          saveText={isEdit ? 'Save' : 'Create'}
-          defaultValues={
-            isEdit && editingUser
-              ? toFormValues(editingUser, designations)
-              : undefined
+          extraAction={
+            <button
+              type="button"
+              onClick={() => navigate('/home')}
+              className="inline-flex h-[44px] cursor-pointer items-center gap-2 rounded-[14px] border border-[rgba(79,70,229,0.25)] bg-white/70 px-4 text-xs font-semibold text-[#312E81] hover:bg-white transition"
+            >
+              <ArrowLeft className="size-4" />
+              <span>Back to list</span>
+            </button>
           }
-          onCancel={() => navigate('/home')}
-          onSubmit={handleSubmit}
         />
-      ) : editingError ? null : (
-        <div className="grid gap-4 sm:grid-cols-2">
-          {Array.from({ length: 8 }, (_, index) => (
-            <Skeleton key={index} className="h-12 w-full rounded-xl" />
-          ))}
-        </div>
-      )}
+
+        {editingError || designationsError ? (
+          <div className="rounded-[14px] border border-red-200 bg-red-50/80 p-3 text-xs text-[#DC2626]">
+            {editingError || designationsError}
+          </div>
+        ) : null}
+
+        {canShowForm ? (
+          <EmployeeForm
+            key={
+              isEdit
+                ? `${editingUser?.id}-${editingUser?.designation}`
+                : 'create'
+            }
+            designations={designations}
+            locationOptions={formOptions.locationOptions}
+            stateOptions={formOptions.stateOptions}
+            regionOptions={formOptions.regionOptions}
+            territoryOptions={formOptions.territoryOptions}
+            saving={saving}
+            error={saveError}
+            isEdit={isEdit}
+            saveText={isEdit ? 'Save Changes' : 'Create Employee'}
+            defaultValues={
+              isEdit && editingUser
+                ? toFormValues(editingUser, designations)
+                : undefined
+            }
+            onCancel={() => navigate('/home')}
+            onSubmit={handleSubmit}
+          />
+        ) : editingError ? null : (
+          <div className="glass-card flex-1 p-6 sm:p-8 space-y-6">
+            <div className="space-y-3">
+              <Skeleton className="h-5 w-40 bg-indigo-100/60 rounded" />
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Skeleton className="h-[44px] w-full rounded-[14px] bg-indigo-100/40" />
+                <Skeleton className="h-[44px] w-full rounded-[14px] bg-indigo-100/40" />
+                <Skeleton className="h-[44px] w-full rounded-[14px] bg-indigo-100/40" />
+                <Skeleton className="h-[44px] w-full rounded-[14px] bg-indigo-100/40" />
+              </div>
+            </div>
+            <div className="space-y-3 pt-4 border-t border-[rgba(79,70,229,0.1)]">
+              <Skeleton className="h-5 w-40 bg-indigo-100/60 rounded" />
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Skeleton className="h-[44px] w-full rounded-[14px] bg-indigo-100/40" />
+                <Skeleton className="h-[44px] w-full rounded-[14px] bg-indigo-100/40" />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </AdminLayout>
   )
 }

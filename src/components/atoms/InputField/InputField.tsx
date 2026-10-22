@@ -58,9 +58,9 @@ export function InputField<T extends FieldValues>({
         'border-primary-foreground/40 text-primary-foreground placeholder:text-primary-foreground/20 border-[0.5px] bg-transparent placeholder:text-[16px]',
     },
     light: {
-      label: 'text-[13px] font-medium text-text-secondary',
+      label: 'text-[13px] font-semibold text-[#1E1B4B]',
       input:
-        'border-border bg-background-surface text-text-emphasis placeholder:text-text-faint hover:border-border-strong',
+        'border border-white/85 bg-white/70 text-[#1E1B4B] placeholder:text-[#4C4A7A]/60 backdrop-blur-sm hover:bg-white/85 focus:border-[#4F46E5] focus:bg-white',
     },
   }
 
@@ -75,7 +75,7 @@ export function InputField<T extends FieldValues>({
           {label && (
             <label
               htmlFor={fieldId}
-              className={`mb-2 block tracking-wide ${currentTheme.label}`}
+              className={`mb-1.5 block tracking-wide ${currentTheme.label}`}
             >
               {label} {isRequired && <span className="text-error">*</span>}
             </label>
@@ -84,9 +84,9 @@ export function InputField<T extends FieldValues>({
           <div className="relative flex items-center">
             {isMobileNumber && (
               <div
-                className={`mr-2 flex h-12 items-center rounded-2xl border px-4 whitespace-nowrap ${currentTheme.input}`}
+                className={`mr-2 flex h-[44px] items-center rounded-[14px] border px-3.5 whitespace-nowrap text-xs font-semibold ${currentTheme.input}`}
               >
-                <span className="text-sm font-medium">IN +91</span>
+                <span>IN +91</span>
               </div>
             )}
 
@@ -123,7 +123,7 @@ export function InputField<T extends FieldValues>({
                 }
               }}
               placeholder={placeholder}
-              className={`h-12 w-full min-w-0 rounded-xl border px-4 text-sm outline-none transition duration-200 ${startIcon ? 'pl-10' : ''} ${className ?? ''} ${
+              className={`h-[44px] w-full min-w-0 rounded-[14px] border px-4 text-[13px] outline-none transition duration-150 ${startIcon ? 'pl-10' : ''} ${className ?? ''} ${
                 isbgColor ? 'bg-transparent' : ''
               } ${
                 disabled
@@ -131,8 +131,8 @@ export function InputField<T extends FieldValues>({
                   : ''
               } ${type === 'password' || suffix ? 'pr-12' : ''} ${currentTheme.input} ${
                 fieldState.error
-                  ? 'border-error-border focus:border-error-border focus:ring-4 focus:ring-error-ring'
-                  : 'focus:border-primary focus:ring-4 focus:ring-primary/15'
+                  ? 'border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-100'
+                  : 'focus:border-[#4F46E5] focus:ring-2 focus:ring-[#4F46E5]/15'
               }`}
             />
 

@@ -86,15 +86,19 @@ export function EmployeeForm({
 
   return (
     <FormProvider {...methods}>
-      <form className="h-full" onSubmit={methods.handleSubmit(onSubmit)}>
+      <form
+        className="h-full flex flex-col flex-1 min-h-0"
+        onSubmit={methods.handleSubmit(onSubmit)}
+        noValidate
+      >
         <FormLayout onCancel={onCancel} saving={saving} saveText={saveText}>
           {error ? (
-            <p className="rounded-xl bg-error-soft px-4 py-3 text-sm text-error">
+            <div className="rounded-[14px] border border-red-200 bg-red-50/80 px-4 py-3 text-xs text-[#DC2626]">
               {error}
-            </p>
+            </div>
           ) : null}
-
-          <div className="grid gap-4 sm:grid-cols-2 rounded-2xl border border-border bg-glass-panel p-5 shadow-card">
+          <div className="grid grid-cols-2 gap-5">
+            {/* Section 1: Basic Identity */}
             <InputField<EmployeeFormValues>
               name="firstName"
               label="First Name"
@@ -126,10 +130,30 @@ export function EmployeeForm({
                 value: item.id,
               }))}
             />
+
+            {/* Section 2: Contact Information */}
+            <InputField<EmployeeFormValues>
+              name="phone"
+              label="Mobile Number"
+              placeholder="Enter 10-digit mobile"
+              type="tel"
+              maxLength={10}
+              isRequired
+              isMobileNumber
+            />
+            <InputField<EmployeeFormValues>
+              name="email"
+              label="Email Address"
+              placeholder="Enter email address"
+              type="email"
+              isRequired
+            />
+
+            {/* Section 3: Hierarchy & Regional Assignment */}
             {locationOptions.length ? (
               <SelectField<EmployeeFormValues>
                 name="location"
-                label="SBU"
+                label="SBU / Location"
                 placeholder="Select SBU"
                 isRequired
                 isSearch
@@ -139,15 +163,16 @@ export function EmployeeForm({
             ) : (
               <InputField<EmployeeFormValues>
                 name="location"
-                label="SBU"
+                label="SBU / Location"
                 placeholder="Enter SBU"
                 isRequired
               />
             )}
+
             {stateOptions.length ? (
               <SelectField<EmployeeFormValues>
                 name="state"
-                label="Zone"
+                label="Zone / State"
                 placeholder="Select zone"
                 isRequired
                 isSearch
@@ -157,11 +182,12 @@ export function EmployeeForm({
             ) : (
               <InputField<EmployeeFormValues>
                 name="state"
-                label="Zone"
+                label="Zone / State"
                 placeholder="Enter zone"
                 isRequired
               />
             )}
+
             {regionOptions.length ? (
               <SelectField<EmployeeFormValues>
                 name="regionName"
@@ -180,10 +206,11 @@ export function EmployeeForm({
                 isRequired
               />
             )}
+
             {territoryOptions.length ? (
               <SelectField<EmployeeFormValues>
                 name="territories"
-                label="Territory"
+                label="Territory / Area"
                 placeholder="Select territory"
                 isRequired
                 isSearch
@@ -191,21 +218,6 @@ export function EmployeeForm({
                 options={toOptions(territoryOptions)}
               />
             ) : null}
-            <InputField<EmployeeFormValues>
-              name="phone"
-              label="Mobile Number"
-              placeholder="Enter mobile number"
-              type="tel"
-              maxLength={10}
-              isRequired
-            />
-            <InputField<EmployeeFormValues>
-              name="email"
-              label="Email"
-              placeholder="Enter email"
-              type="email"
-              isRequired
-            />
           </div>
         </FormLayout>
       </form>

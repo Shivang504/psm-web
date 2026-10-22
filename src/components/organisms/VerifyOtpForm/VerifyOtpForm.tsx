@@ -112,19 +112,21 @@ export function VerifyOtpForm({
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleFormSubmit} noValidate>
-        <p className="text-sm font-semibold text-primary">Verification</p>
-        <h1 className="mt-2 text-[34px] leading-tight font-semibold tracking-tight text-text-strong">
+        <span className="inline-flex items-center gap-1.5 rounded-[10px] bg-[rgba(79,70,229,0.12)] px-2.5 py-1 text-xs font-semibold text-[#4F46E5]">
+          Verification
+        </span>
+        <h1 className="mt-3 text-3xl font-bold tracking-tight text-[#1E1B4B]">
           Check your phone
         </h1>
-        <p className="mt-2 text-sm leading-6 text-text-muted">
+        <p className="mt-1.5 text-sm text-[#4C4A7A]">
           Enter the 6-digit code sent to{' '}
-          <span className="font-medium text-text-emphasis">
-            {mobile || 'your mobile number'}
+          <span className="font-semibold text-[#1E1B4B]">
+            {mobile ? `+91 ${mobile}` : 'your mobile number'}
           </span>
           .
         </p>
 
-        <div className="mt-8">
+        <div className="mt-7">
           <OtpField
             name="otp"
             disabled={loading || resending}
@@ -132,36 +134,40 @@ export function VerifyOtpForm({
           />
         </div>
 
-        <p className="mt-4 text-sm text-text-muted">
+        <p className="mt-4 text-xs sm:text-sm text-[#4C4A7A]">
           Didn’t receive the code?{' '}
           <button
             type="button"
             onClick={handleResend}
             disabled={secondsLeft > 0 || loading || resending}
-            className="font-semibold text-primary transition hover:text-primary-hover disabled:cursor-default disabled:text-text-faint"
+            className="font-semibold text-[#4F46E5] transition hover:text-[#4338CA] disabled:cursor-default disabled:text-[#4C4A7A]/50"
           >
-            {resending ? 'Sending code' : 'Resend code'}
+            {resending ? 'Sending code...' : 'Resend code'}
           </button>
-          {secondsLeft > 0 ? <span> in {countdown}</span> : null}
+          {secondsLeft > 0 ? (
+            <span className="text-[#4C4A7A]"> in {countdown}</span>
+          ) : null}
         </p>
 
         <Button
           type="submit"
           loading={loading}
           disabled={resending}
-          className="mt-6"
+          className="mt-6 w-full h-[46px] rounded-[16px] bg-[#4F46E5] text-white font-semibold shadow-md shadow-[#4F46E5]/25 hover:bg-[#4338CA]"
         >
-          {loading ? 'Verifying' : 'Verify and continue'}
+          {loading ? 'Verifying...' : 'Verify and continue'}
           {loading ? null : <ArrowRight className="size-4" />}
         </Button>
 
-        <Link
-          to="/login"
-          className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-text-secondary transition hover:text-primary"
-        >
-          <ArrowLeft className="size-4" />
-          Back to login
-        </Link>
+        <div className="mt-4 text-center">
+          <Link
+            to="/login"
+            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#312E81] transition hover:text-[#4F46E5]"
+          >
+            <ArrowLeft className="size-4" />
+            Back to login
+          </Link>
+        </div>
       </form>
     </FormProvider>
   )

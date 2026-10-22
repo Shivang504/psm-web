@@ -48,34 +48,11 @@ export function Sidebar({
           collapsed ? 'justify-center px-0' : 'px-1.5'
         }`}
       >
-        <div className="flex size-[44px] shrink-0 items-center justify-center rounded-[14px] bg-[#4F46E5] text-white shadow-md shadow-[#4F46E5]/20">
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M4 12a8 8 0 0 1 14-5" />
-            <path d="M20 12a8 8 0 0 1-14 5" />
-            <circle cx="12" cy="12" r="2" />
-          </svg>
-        </div>
-
-        {!collapsed ? (
-          <div className="min-w-0">
-            <h1 className="text-[16px] font-bold tracking-tight text-[#1E1B4B]">
-              Admin
-            </h1>
-            <p className="text-[12px] text-[#4C4A7A] truncate">
-              Manage · Monitor · Grow
-            </p>
-          </div>
-        ) : null}
+        <img
+          src="/logo.png"
+          alt="The PSM Application Logo"
+          className="h-14 w-auto object-contain"
+        />
       </div>
 
       {/* Navigation Links */}
