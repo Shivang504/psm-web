@@ -1,51 +1,110 @@
 @import 'tailwindcss';
 
 :root {
+  /* Brand and Core Colors */
   --primary: #4f46e5;
   --primary-hover: #4338ca;
   --primary-foreground: #ffffff;
   --primary-soft: #eef2ff;
-  --primary-deep: #2a2578;
+  --primary-deep: #312e81;
   --primary-light: #7c73f6;
-  --primary-muted: #ddd6fe;
-  --primary-border: #c7d2fe;
+  --primary-muted: #e0e7ff;
+  --primary-border: rgba(79, 70, 229, 0.18);
+  --primary-divider: rgba(79, 70, 229, 0.12);
 
-  --secondary: #334155;
-  --secondary-hover: #1e293b;
+  /* Typography Colors */
+  --text-main: #1e1b4b;
+  --text-muted: #4c4a7a;
+  --text-nav: #312e81;
+  --text-table-header: #4338ca;
+
+  /* Glass Theme */
+  --glass-bg: rgba(255, 255, 255, 0.62);
+  --glass-bg-subtle: rgba(255, 255, 255, 0.45);
+  --glass-bg-elevated: rgba(255, 255, 255, 0.82);
+  --glass-border: rgba(255, 255, 255, 0.85);
+  --glass-border-subtle: rgba(255, 255, 255, 0.65);
+  --glass-radius: 22px;
+  --glass-blur: 16px;
+
+  /* Page Gradient */
+  --page-gradient: linear-gradient(
+    135deg,
+    #c7d2fe 0%,
+    #fbcfe8 55%,
+    #bae6fd 100%
+  );
+
+  /* Radii */
+  --radius-card: 22px;
+  --radius-button: 14px;
+  --radius-button-lg: 16px;
+  --radius-badge: 10px;
+  --radius-pill: 20px;
+  --radius-avatar: 50%;
+  --radius-segmented: 11px;
+
+  /* Heights */
+  --height-button: 44px;
+  --height-button-lg: 46px;
+  --height-input: 44px;
+  --height-nav: 44px;
+  --height-table-header: 46px;
+  --height-table-row: 62px;
+  --height-table-footer: 64px;
+
+  /* Avatar Colors */
+  --avatar-a-bg: #e0e7ff;
+  --avatar-a-text: #3730a3;
+  --avatar-b-bg: #fbcfe8;
+  --avatar-b-text: #831843;
+  --avatar-c-bg: #bae6fd;
+  --avatar-c-text: #0c4a6e;
+
+  /* Pill Colors */
+  --pill-absent-bg: #fee2e2;
+  --pill-absent-text: #991b1b;
+  --pill-absent-dot: #dc2626;
+  --pill-present-bg: #dcfce7;
+  --pill-present-text: #166534;
+  --pill-present-dot: #16a34a;
+
+  /* Fallback & compatibility tokens */
+  --secondary: #312e81;
+  --secondary-hover: #1e1b4b;
   --secondary-foreground: #ffffff;
-  --secondary-soft: #f8fafc;
+  --secondary-soft: #eef2ff;
 
   --background: #f6f7fb;
   --background-surface: #ffffff;
   --background-muted: #f8fafc;
-  --background-overlay: #020617;
+  --background-overlay: rgba(30, 27, 75, 0.35);
 
-  --text: #0f172a;
-  --text-strong: #020617;
-  --text-emphasis: #1e293b;
-  --text-secondary: #475569;
-  --text-muted: #64748b;
-  --text-faint: #94a3b8;
-  --text-disabled: #cbd5e1;
+  --text: #1e1b4b;
+  --text-strong: #1e1b4b;
+  --text-emphasis: #1e1b4b;
+  --text-secondary: #4c4a7a;
+  --text-faint: #64748b;
+  --text-disabled: #94a3b8;
 
-  --border: #e2e8f0;
-  --border-subtle: #f1f5f9;
-  --border-strong: #cbd5e1;
+  --border: rgba(79, 70, 229, 0.12);
+  --border-subtle: rgba(79, 70, 229, 0.08);
+  --border-strong: rgba(79, 70, 229, 0.25);
 
-  --success: #047857;
-  --success-soft: #ecfdf5;
-  --success-border: #a7f3d0;
+  --success: #16a34a;
+  --success-soft: #dcfce7;
+  --success-border: #bbf7d0;
 
-  --warning: #b45309;
-  --warning-soft: #fffbeb;
+  --warning: #d97706;
+  --warning-soft: #fef3c7;
   --warning-border: #fde68a;
 
-  --error: #f43f5e;
-  --error-strong: #be123c;
-  --error-soft: #fff1f2;
-  --error-border: #fb7185;
-  --error-ring: #ffe4e6;
-  --error-muted: #fecdd3;
+  --error: #dc2626;
+  --error-strong: #991b1b;
+  --error-soft: #fee2e2;
+  --error-border: #fca5a5;
+  --error-ring: #fee2e2;
+  --error-muted: #fecaca;
 }
 
 html,
@@ -56,8 +115,13 @@ body,
 
 body {
   margin: 0;
-  background: var(--background-surface);
-  color: var(--text);
+  font-family:
+    'Plus Jakarta Sans',
+    system-ui,
+    -apple-system,
+    sans-serif;
+  color: var(--text-main);
+  background: var(--page-gradient);
 }
 
 @theme inline {
@@ -81,6 +145,7 @@ body {
   --color-background-overlay: var(--background-overlay);
 
   --color-text: var(--text);
+  --color-text-main: var(--text-main);
   --color-text-strong: var(--text-strong);
   --color-text-emphasis: var(--text-emphasis);
   --color-text-secondary: var(--text-secondary);
@@ -107,21 +172,37 @@ body {
   --color-error-ring: var(--error-ring);
   --color-error-muted: var(--error-muted);
 
-  --shadow-primary: 0 12px 24px -14px
-    color-mix(in srgb, var(--primary) 90%, transparent);
-  --shadow-primary-sm: 0 8px 16px -10px
-    color-mix(in srgb, var(--primary) 90%, transparent);
-  --shadow-card: 0 18px 40px -32px
-    color-mix(in srgb, var(--primary-deep) 55%, transparent);
-  --shadow-dialog: 0 24px 60px -28px
-    color-mix(in srgb, var(--primary-deep) 55%, transparent);
-
-  --background-image-primary-gradient: linear-gradient(
-    165deg,
-    var(--primary-deep) 0%,
-    var(--primary) 52%,
-    var(--primary-light) 100%
-  );
-
   --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+}
+
+.glass-panel {
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 22px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 22px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-control {
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.glass-dropdown {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 16px 36px -10px rgba(30, 27, 75, 0.15);
 }

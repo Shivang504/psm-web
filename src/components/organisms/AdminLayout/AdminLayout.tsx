@@ -1,7 +1,8 @@
-import { LogOut, Menu, Users, X, type LucideIcon } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { useEffect, useState, type ReactNode } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
-import { BrandMark } from '../../atoms/BrandMark'
+import { useNavigate } from 'react-router-dom'
+import { Sidebar } from '../../layout/Sidebar'
+import { PageHeader } from '../../layout/PageHeader'
 import { sagaActions } from '../../../store/actions'
 import { logout } from '../../../store/slices/authSlice'
 import {
@@ -13,30 +14,44 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { clearAuthSession, setStoredRoleId } from '../../../utils/auth'
 import type { ProfileResponse } from '../../../utils/types'
 
-type AdminLayoutProps = {
-  title: string
+export interface AdminLayoutProps {
+  title?: string
   subtitle?: string
+  headerAction?: ReactNode
+  hideHeader?: boolean
   children: ReactNode
 }
 
-type NavItem = {
-  label: string
-  to: string
-  icon: LucideIcon
-}
-
-const navItems: NavItem[] = [
-  { label: 'Employee list', to: '/home', icon: Users },
-]
-
-export function AdminLayout({ title, subtitle, children }: AdminLayoutProps) {
-  const [menuOpen, setMenuOpen] = useState(false)
+export function AdminLayout({
+  title,
+  subtitle,
+  headerAction,
+  hideHeader = false,
+  children,
+}: AdminLayoutProps) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [tabletCollapsed, setTabletCollapsed] = useState(false)
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const mobile = useAppSelector((state) => state.auth.mobile)
   const roleId = useAppSelector((state) => state.profile.roleId)
   const profileLoading = useAppSelector((state) => state.profile.loading)
   const profileError = useAppSelector((state) => state.profile.error)
+
+  // Handle auto-collapse on tablet screens
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768 && window.innerWidth < 1200) {
+        setTabletCollapsed(true)
+      } else {
+        setTabletCollapsed(false)
+      }
+    }
+
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   useEffect(() => {
     if (roleId || profileLoading || profileError) return
@@ -73,121 +88,80 @@ export function AdminLayout({ title, subtitle, children }: AdminLayoutProps) {
   }
 
   return (
-    <div className="flex min-h-svh bg-background text-text">
-      <aside className="sticky top-0 hidden h-svh w-64 shrink-0 flex-col bg-primary-gradient text-primary-foreground lg:flex">
-        <SidebarBody mobile={mobile} onSignOut={handleSignOut} />
-      </aside>
+    <div className="flex h-screen w-full overflow-hidden p-3 sm:p-5 gap-4 sm:gap-5 bg-[linear-gradient(135deg,#C7D2FE_0%,#FBCFE8_55%,#BAE6FD_100%)] text-[#1E1B4B] font-['Plus_Jakarta_Sans',system-ui,sans-serif]">
+      {/* Desktop & Tablet Sidebar */}
+      <div className="hidden md:flex shrink-0">
+        <Sidebar
+          mobile={mobile}
+          onSignOut={handleSignOut}
+          collapsed={tabletCollapsed}
+        />
+      </div>
 
-      {menuOpen ? (
-        <div className="fixed inset-0 z-40 lg:hidden">
+      {/* Mobile Drawer Sidebar */}
+      {mobileMenuOpen ? (
+        <div className="fixed inset-0 z-50 md:hidden">
           <button
             type="button"
             aria-label="Close menu"
-            className="absolute inset-0 bg-background-overlay/45"
-            onClick={() => setMenuOpen(false)}
+            className="fixed inset-0 bg-[#1E1B4B]/30 backdrop-blur-xs"
+            onClick={() => setMobileMenuOpen(false)}
           />
-          <aside className="relative flex h-full w-72 flex-col bg-primary-gradient text-primary-foreground shadow-2xl">
+          <div className="relative flex h-full w-[270px] max-w-[85vw] flex-col p-4">
             <button
               type="button"
               aria-label="Close menu"
-              onClick={() => setMenuOpen(false)}
-              className="absolute top-4 right-4 inline-flex size-8 items-center justify-center rounded-lg text-primary-foreground/80 hover:bg-primary-foreground/10"
+              onClick={() => setMobileMenuOpen(false)}
+              className="absolute top-6 right-6 z-10 inline-flex size-8 items-center justify-center rounded-[10px] bg-white/80 text-[#312E81] shadow-xs"
             >
               <X className="size-4" />
             </button>
-            <SidebarBody
+            <Sidebar
               mobile={mobile}
               onSignOut={handleSignOut}
-              onNavigate={() => setMenuOpen(false)}
+              onNavigate={() => setMobileMenuOpen(false)}
+              className="h-full shadow-2xl"
             />
-          </aside>
+          </div>
         </div>
       ) : null}
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-20 flex items-center gap-3 border-b border-border/80 bg-background-surface/90 px-4 py-4 backdrop-blur sm:px-6">
+      {/* Main Content Area */}
+      <main className="flex-1 min-w-0 flex flex-col gap-4 overflow-hidden">
+        {/* Mobile Header Bar */}
+        <div className="flex items-center justify-between md:hidden glass-panel px-4 py-2.5">
           <button
             type="button"
             aria-label="Open menu"
-            onClick={() => setMenuOpen(true)}
-            className="inline-flex size-9 items-center justify-center rounded-xl text-text-secondary ring-1 ring-border lg:hidden"
+            onClick={() => setMobileMenuOpen(true)}
+            className="inline-flex size-9 cursor-pointer items-center justify-center rounded-[12px] bg-white/70 text-[#312E81] border border-white/80 shadow-xs"
           >
-            <Menu className="size-4" />
+            <Menu className="size-5" />
           </button>
-          <div className="min-w-0">
-            <h1 className="truncate text-lg font-semibold tracking-tight text-text-strong">
-              {title}
-            </h1>
-            {subtitle ? (
-              <p className="truncate text-sm text-text-muted">{subtitle}</p>
+          <div className="text-right">
+            <h2 className="text-sm font-bold text-[#1E1B4B]">
+              {title || 'Admin'}
+            </h2>
+            {mobile ? (
+              <p className="text-[11px] text-[#4C4A7A] truncate">{mobile}</p>
             ) : null}
           </div>
-        </header>
-
-        <main className="flex-1 px-4 py-5 sm:px-6 sm:py-6">{children}</main>
-      </div>
-    </div>
-  )
-}
-
-function SidebarBody({
-  mobile,
-  onSignOut,
-  onNavigate,
-}: {
-  mobile: string | null
-  onSignOut: () => void
-  onNavigate?: () => void
-}) {
-  return (
-    <>
-      <div className="flex items-center gap-3 px-5 pt-6 pb-6">
-        <BrandMark className="size-10 rounded-2xl shadow-lg shadow-primary-deep/30" />
-        <div>
-          <p className="text-[15px] font-semibold tracking-tight">Admin</p>
-          <p className="text-xs text-primary-foreground/70">
-            Manage · Monitor · Grow
-          </p>
         </div>
-      </div>
 
-      <nav className="flex flex-1 flex-col gap-1 px-3">
-        {navItems.map((item) => {
-          const Icon = item.icon
+        {/* Desktop Header if not hidden and title exists */}
+        {!hideHeader && title ? (
+          <PageHeader
+            title={title}
+            subtitle={subtitle}
+            extraAction={headerAction}
+          />
+        ) : null}
 
-          return (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              onClick={onNavigate}
-              className={({ isActive }) =>
-                `flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
-                  isActive
-                    ? 'bg-primary-foreground/15 text-primary-foreground ring-1 ring-primary-foreground/25'
-                    : 'text-primary-foreground/75 hover:bg-primary-foreground/10 hover:text-primary-foreground'
-                }`
-              }
-            >
-              <Icon className="size-4" />
-              {item.label}
-            </NavLink>
-          )
-        })}
-      </nav>
-
-      <div className="mt-auto border-t border-primary-foreground/15 p-4">
-        <p className="truncate text-xs text-primary-foreground/70">
-          {mobile ? `Signed in · ${mobile}` : 'Signed in'}
-        </p>
-        <button
-          type="button"
-          onClick={onSignOut}
-          className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary-foreground/15 px-3 py-2 text-sm font-semibold ring-1 ring-primary-foreground/25 transition hover:bg-primary-foreground/25"
-        >
-          <LogOut className="size-4" />
-          Sign out
-        </button>
-      </div>
-    </>
+        {/* Page Children (Toolbar + Table or Forms) */}
+        <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
+          {children}
+        </div>
+      </main>
+    </div>
   )
 }

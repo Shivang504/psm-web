@@ -1,13 +1,21 @@
-import { Pencil, Plus, Trash2 } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { Eye, Pencil, Power, Trash2 } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import StatusTabs from '../../components/atoms/StatusTabs/StatusTabs'
-import { FilterDropdown } from '../../components/molecules/FilterDropdown'
-import { AdminLayout } from '../../components/organisms/AdminLayout'
+import { Avatar } from '../../components/atoms/Avatar'
+import { Badge } from '../../components/atoms/Badge'
+import { StatusPill } from '../../components/atoms/StatusPill'
 import {
-  TableLayout,
+  DataTable,
+  AreasCell,
   type ColumnType,
-} from '../../components/organisms/TableLayout'
+  type ActionType,
+} from '../../components/molecules/DataTable'
+import { Dialog } from '../../components/molecules/Dialog'
+import { FilterDropdown } from '../../components/molecules/FilterDropdown'
+import { PageHeader } from '../../components/layout/PageHeader'
+import { Toolbar } from '../../components/layout/Toolbar'
+import { AdminLayout } from '../../components/organisms/AdminLayout'
+import { EmployeeDrawer } from './EmployeeDrawer'
 import { sagaActions } from '../../store/actions'
 import { store, type AppDispatch } from '../../store'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
@@ -42,8 +50,7 @@ import type {
   UserListQuery,
   UserListResponse,
 } from '../../utils/types'
-import { statusStyles } from '../../utils/styleVariant'
-import { attendanceLabel, displayName, displayValue } from '../../utils/helper'
+import { displayName, displayValue } from '../../utils/helper'
 
 function dispatchUserList(dispatch: AppDispatch, nextQuery: UserListQuery) {
   dispatch(fetchUserList(nextQuery))
@@ -69,52 +76,24 @@ function dispatchUserList(dispatch: AppDispatch, nextQuery: UserListQuery) {
   })
 }
 
-function StatusBadge({ status }: { status?: string | null }) {
-  const label = status?.trim() || '—'
+function parseAreas(user: UserListItem): string[] {
+  const territories = user.config?.territories?.trim()
+  if (territories) {
+    return territories
+      .split(/[,;\n]+/)
+      .map((item) => item.trim())
+      .filter(Boolean)
+  }
 
-  return (
-    <span
-      className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ring-1 ${
-        statusStyles[label] ??
-        'bg-background-muted text-text-secondary ring-border'
-      }`}
-    >
-      {label}
-    </span>
-  )
-}
+  const location = user.config?.location?.trim()
+  if (location) {
+    return location
+      .split(/[,;\n]+/)
+      .map((item) => item.trim())
+      .filter(Boolean)
+  }
 
-function StatusSwitch({
-  active,
-  disabled,
-  onToggle,
-}: {
-  active: boolean
-  disabled: boolean
-  onToggle: () => void
-}) {
-  return (
-    <button
-      type="button"
-      role="switch"
-      aria-checked={active}
-      aria-label={active ? 'Mark inactive' : 'Mark active'}
-      disabled={disabled}
-      onClick={(event) => {
-        event.stopPropagation()
-        onToggle()
-      }}
-      className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition disabled:cursor-not-allowed disabled:opacity-60 ${
-        active ? 'bg-primary' : 'bg-border-strong'
-      }`}
-    >
-      <span
-        className={`inline-block size-5 rounded-full bg-background-surface shadow transition ${
-          active ? 'translate-x-5' : 'translate-x-0.5'
-        }`}
-      />
-    </button>
-  )
+  return []
 }
 
 export default function HomePage() {
@@ -134,6 +113,7 @@ export default function HomePage() {
     actionLoading,
   } = useAppSelector((state) => state.users)
   const navigate = useNavigate()
+
   const deleteTarget = items.find((user) => user.id === deleteTargetId)
   const totalPages = Math.ceil(total / query.limit)
   const listError = designationsError || error
@@ -239,36 +219,39 @@ export default function HomePage() {
     }, 400)
   }
 
-  const dispatchStatus = (row: UserListItem, status: 'Active' | 'Inactive') => {
-    dispatch(updateEmployeeStatus({ id: row.id, status }))
-    dispatch({
-      type: sagaActions.UPDATE_EMPLOYEE_STATUS,
-      payload: {
-        query: `/users/${row.id}`,
-        method: 'PUT',
-        variables: {
-          id: row.id,
-          first_name: row.first_name ?? '',
-          last_name: row.last_name ?? '',
-          email: row.email ?? '',
-          contact_no: row.contact_no ?? '',
-          role: row.role || 'employee',
-          status,
-          config: readConfig(row.config),
+  const dispatchStatus = useCallback(
+    (row: UserListItem, status: 'Active' | 'Inactive') => {
+      dispatch(updateEmployeeStatus({ id: row.id, status }))
+      dispatch({
+        type: sagaActions.UPDATE_EMPLOYEE_STATUS,
+        payload: {
+          query: `/users/${row.id}`,
+          method: 'PUT',
+          variables: {
+            id: row.id,
+            first_name: row.first_name ?? '',
+            last_name: row.last_name ?? '',
+            email: row.email ?? '',
+            contact_no: row.contact_no ?? '',
+            role: row.role || 'employee',
+            status,
+            config: readConfig(row.config),
+          },
+          showToast: true,
+          successMessage: 'Employee status updated',
+          onSuccess: () => {
+            dispatch(updateEmployeeStatusFinished())
+            const current = store.getState().users.query
+            if (current.role) dispatchUserList(dispatch, current)
+          },
+          onFailure: () => {
+            dispatch(updateEmployeeStatusFinished())
+          },
         },
-        showToast: true,
-        successMessage: 'Employee status updated',
-        onSuccess: () => {
-          dispatch(updateEmployeeStatusFinished())
-          const current = store.getState().users.query
-          if (current.role) dispatchUserList(dispatch, current)
-        },
-        onFailure: () => {
-          dispatch(updateEmployeeStatusFinished())
-        },
-      },
-    })
-  }
+      })
+    },
+    [dispatch],
+  )
 
   const dispatchDelete = (id: string) => {
     dispatch(deleteEmployee(id))
@@ -299,164 +282,245 @@ export default function HomePage() {
     })
   }
 
-  const columns: ColumnType<UserListItem>[] = [
-    {
-      key: 'full_name',
-      label: 'Name',
-      sortable: true,
-      sortKey: 'first_name',
-      isNowrap: true,
-      render: (row) => displayName(row),
-    },
-    {
-      key: 'employeeCode',
-      label: 'Code',
-      isNowrap: true,
-      render: (row) => displayValue(row.config?.employeeCode),
-    },
-    {
-      key: 'designation',
-      label: 'Designation',
-      sortable: true,
-      isNowrap: true,
-      render: (row) => displayValue(row.designation),
-    },
-    {
-      key: 'region',
-      label: 'SBU',
-      render: (row) => displayValue(row.config?.regionName),
-    },
-    {
-      key: 'location',
-      label: 'Location',
-      render: (row) => displayValue(row.config?.location),
-    },
-    {
-      key: 'state',
-      label: 'State',
-      render: (row) => displayValue(row.config?.state),
-    },
-    {
-      key: 'contact_no',
-      label: 'Mobile',
-      sortable: true,
-      isNowrap: true,
-      render: (row) => displayValue(row.contact_no),
-    },
-    {
-      key: 'attendance',
-      label: 'Today',
-      isNowrap: true,
-      render: (row) => attendanceLabel(row.attendance),
-    },
-    {
-      key: 'status',
-      label: 'Status',
-      sortable: true,
-      render: (row) =>
-        query.tab === 'Deleted' ? (
-          <StatusBadge status={row.status} />
-        ) : (
-          <StatusSwitch
-            active={row.status === 'Active'}
-            disabled={actionLoading || loading}
-            onToggle={() =>
-              dispatchStatus(
-                row,
-                row.status === 'Active' ? 'Inactive' : 'Active',
-              )
-            }
-          />
+  // Selected user for details drawer
+  const selectedUser = useMemo(() => {
+    return items.find((u) => u.id === selectedId) || null
+  }, [items, selectedId])
+
+  // Dynamic columns definition
+  const columns: ColumnType<UserListItem>[] = useMemo(
+    () => [
+      {
+        key: 'employee',
+        label: 'Employee',
+        sortable: true,
+        sortKey: 'first_name',
+        width: '2.3fr',
+        render: (row) => {
+          const name = displayName(row)
+          const code = displayValue(row.config?.employeeCode)
+
+          return (
+            <div className="flex items-center gap-3 min-w-0 pr-2">
+              <Avatar name={name} />
+              <div className="min-w-0 truncate">
+                <b className="block text-[14px] font-semibold text-[#1E1B4B] truncate">
+                  {name}
+                </b>
+                <span className="text-[12px] text-[#4C4A7A] block truncate">
+                  {code}
+                </span>
+              </div>
+            </div>
+          )
+        },
+      },
+      {
+        key: 'role',
+        label: 'Role',
+        sortable: true,
+        sortKey: 'designation',
+        width: '0.8fr',
+        render: (row) => (
+          <Badge variant="role">
+            <span className="truncate max-w-[80px]">
+              {displayValue(row.designation || row.role)}
+            </span>
+          </Badge>
         ),
-    },
-  ]
+      },
+      {
+        key: 'region',
+        label: 'Region',
+        width: '1.2fr',
+        render: (row) => {
+          const region = displayValue(row.config?.regionName)
+          return (
+            <span className="truncate text-[#1E1B4B] block" title={region}>
+              {region}
+            </span>
+          )
+        },
+      },
+      {
+        key: 'areas',
+        label: 'Areas',
+        width: '2.2fr',
+        render: (row) => <AreasCell areas={parseAreas(row)} />,
+      },
+      {
+        key: 'state',
+        label: 'State',
+        width: '1fr',
+        render: (row) => {
+          const state = displayValue(row.config?.state)
+          return (
+            <span className="truncate text-[#1E1B4B] block" title={state}>
+              {state}
+            </span>
+          )
+        },
+      },
+      {
+        key: 'mobile',
+        label: 'Mobile',
+        sortable: true,
+        sortKey: 'contact_no',
+        width: '1.1fr',
+        render: (row) => (
+          <span className="truncate text-[#1E1B4B] block">
+            {displayValue(row.contact_no)}
+          </span>
+        ),
+      },
+      {
+        key: 'attendance',
+        label: 'Attendance',
+        width: '0.9fr',
+        render: (row) => <StatusPill status={row.attendance} />,
+      },
+    ],
+    [],
+  )
+
+  // Dynamic actions definition
+  const actions: ActionType<UserListItem>[] = useMemo(
+    () => [
+      {
+        label: 'View',
+        icon: Eye,
+        onClick: (row) => dispatch(setSelectedUserId(row.id)),
+      },
+      {
+        label: 'Edit',
+        icon: Pencil,
+        condition: () => query.tab !== 'Deleted',
+        onClick: (row) => navigate(`/home/${row.id}/edit`),
+      },
+      {
+        label: 'Status',
+        icon: Power,
+        condition: () => query.tab !== 'Deleted',
+        title: (row) => (row.status === 'Active' ? 'Deactivate' : 'Activate'),
+        onClick: (row) =>
+          dispatchStatus(row, row.status === 'Active' ? 'Inactive' : 'Active'),
+      },
+      {
+        label: 'Delete',
+        icon: Trash2,
+        variant: 'danger',
+        condition: () => query.tab !== 'Deleted',
+        onClick: (row) => dispatch(requestDeleteEmployee(row.id)),
+      },
+    ],
+    [dispatch, navigate, query.tab, dispatchStatus],
+  )
 
   return (
-    <AdminLayout title="Employee list">
-      {listError ? (
-        <p className="mb-3 text-sm text-error">{listError}</p>
-      ) : null}
-      <TableLayout
-        columns={columns}
-        data={items}
-        loading={loading || designationsLoading}
-        searchTerm={searchText}
-        onSearchChange={handleSearch}
-        searchPlaceholder="Search name or mobile"
-        page={query.page}
-        pageSize={query.limit}
-        totalItems={total}
-        totalPages={total === 0 ? 0 : totalPages}
-        onPageChange={(page) => loadList({ page })}
-        sortBy={query.column}
-        sortOrder={query.sort}
-        onSort={handleSort}
-        selectedRowId={selectedId ?? undefined}
-        onRowClick={(row) => dispatch(setSelectedUserId(row.id))}
-        emptyMessage={
-          listError
-            ? 'The list could not be loaded.'
-            : `No ${query.tab.toLowerCase()} employees.`
-        }
-        buttons={[
-          {
-            label: 'Create employee',
-            icon: Plus,
-            disabled: !employeeRoleId,
-            onClick: () => navigate('/home/new'),
-          },
-        ]}
-        filters={
-          <FilterDropdown
-            options={designations.map((item) => ({
-              label: item.designation,
-              value: item.id,
-            }))}
-            selected={query.designation}
-            placeholder="Designation"
-            clearbutton={true}
-            onChange={(value) => loadList({ designation: value, page: 1 })}
-          />
-        }
-        actions={[
-          // {
-          //   label: 'View',
-          //   icon: Eye,
-          //   onClick: (row) => dispatch(setSelectedUserId(row.id)),
-          // },
-          {
-            label: 'Edit',
-            icon: Pencil,
-            condition: () => query.tab !== 'Deleted',
-            onClick: (row) => navigate(`/home/${row.id}/edit`),
-          },
-          {
-            label: 'Delete',
-            icon: Trash2,
-            condition: () => query.tab !== 'Deleted',
-            onClick: (row) => dispatch(requestDeleteEmployee(row.id)),
-          },
-        ]}
-        dialogOpen={Boolean(deleteTargetId)}
-        dialogTitle="Delete employee"
-        dialogLabel="Delete"
-        dialogLoading={actionLoading}
-        dialogDescription={
-          deleteTarget
-            ? `Delete ${displayName(deleteTarget)}? This moves the employee to the deleted list.`
-            : 'Delete this employee?'
-        }
-        setDialogOpen={() => dispatch(cancelDeleteEmployee())}
-        handleOnclick={() => {
+    <AdminLayout hideHeader={true}>
+      <div className="flex flex-1 min-h-0 flex-col gap-4 overflow-hidden">
+        {/* Page Header */}
+        <PageHeader
+          title="Employee list"
+          subtitle={`${total} employees across all regions`}
+          actionLabel="Create employee"
+          actionDisabled={!employeeRoleId}
+          onAction={() => navigate('/home/new')}
+        />
+
+        {listError ? (
+          <div className="glass-panel border-red-300 bg-red-50/70 p-3 text-xs text-[#991B1B]">
+            {listError}
+          </div>
+        ) : null}
+
+        {/* Toolbar */}
+        <Toolbar
+          searchValue={searchText}
+          onSearchChange={handleSearch}
+          searchPlaceholder="Search name or mobile"
+          activeTab={query.tab}
+          onTabChange={(tab) => loadList({ tab, page: 1 })}
+          filters={
+            <FilterDropdown
+              options={designations.map((item) => ({
+                label: item.designation,
+                value: item.id,
+              }))}
+              selected={query.designation}
+              placeholder="Designation"
+              clearbutton={true}
+              onChange={(value) => loadList({ designation: value, page: 1 })}
+            />
+          }
+        />
+
+        {/* Data Table Card */}
+        <DataTable<UserListItem>
+          columns={columns}
+          data={items}
+          actions={actions}
+          loading={loading || designationsLoading}
+          error={listError ? 'The employee list could not be loaded.' : null}
+          onRetry={() => {
+            const current = store.getState().users.query
+            if (current.role) dispatchUserList(dispatch, current)
+          }}
+          onRowClick={(row) => dispatch(setSelectedUserId(row.id))}
+          sortBy={query.column}
+          sortOrder={query.sort}
+          onSort={handleSort}
+          page={query.page}
+          pageSize={query.limit}
+          totalItems={total}
+          totalPages={total === 0 ? 0 : totalPages}
+          onPageChange={(page) => loadList({ page })}
+          onPageSizeChange={(limit) => loadList({ limit, page: 1 })}
+          selectedRowId={selectedId}
+          emptyMessage={
+            listError
+              ? 'The employee list could not be loaded.'
+              : `No ${query.tab.toLowerCase()} employees.`
+          }
+        />
+      </div>
+
+      {/* Right-side Glass Details Drawer */}
+      <EmployeeDrawer
+        user={selectedUser}
+        open={Boolean(selectedUser)}
+        onClose={() => dispatch(setSelectedUserId(null))}
+        onEdit={(user) => {
+          dispatch(setSelectedUserId(null))
+          navigate(`/home/${user.id}/edit`)
+        }}
+        onToggleStatus={(user) => {
+          dispatchStatus(user, user.status === 'Active' ? 'Inactive' : 'Active')
+        }}
+        onDelete={(user) => {
+          dispatch(setSelectedUserId(null))
+          dispatch(requestDeleteEmployee(user.id))
+        }}
+        canModify={query.tab !== 'Deleted'}
+      />
+
+      {/* Delete Confirmation Modal */}
+      <Dialog
+        title="Delete employee"
+        label="Delete"
+        open={Boolean(deleteTargetId)}
+        loading={actionLoading}
+        onClose={() => dispatch(cancelDeleteEmployee())}
+        handleSubmit={() => {
           if (deleteTargetId) dispatchDelete(deleteTargetId)
         }}
       >
-        <StatusTabs
-          value={query.tab}
-          onChange={(tab) => loadList({ tab, page: 1 })}
-          size="md"
-        />
-      </TableLayout>
+        <p className="text-sm text-[#4C4A7A]">
+          {deleteTarget
+            ? `Are you sure you want to delete ${displayName(deleteTarget)}? This moves the employee to the deleted list.`
+            : 'Are you sure you want to delete this employee?'}
+        </p>
+      </Dialog>
     </AdminLayout>
   )
 }

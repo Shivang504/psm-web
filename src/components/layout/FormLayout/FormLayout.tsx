@@ -25,10 +25,10 @@ export function FormLayout({
   return (
     <div className="flex h-[calc(100svh-7.5rem)] flex-col overflow-hidden">
       <div className="min-h-0 flex-1 overflow-y-auto">
-        <div className="mx-auto space-y-6">{children}</div>
+        <div className="mx-auto space-y-6 glass-panel">{children}</div>
       </div>
 
-      <div className="shrink-0 border rounded-lg border-border bg-background-surface px-6 py-4">
+      <div className="shrink-0 border rounded-lg border-border glass-panel px-6 py-4">
         <div className="flex justify-end gap-3">
           <Button
             type="button"

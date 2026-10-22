@@ -152,15 +152,15 @@ export function TableLayout<T>({
             <div className="flex min-w-0 flex-1 flex-col gap-3 sm:flex-row sm:items-center">
               {onSearchChange ? (
                 <div className="relative w-full sm:max-w-xs">
-                  <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-text-faint">
-                    <Search className="size-4" />
+                  <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-[#4C4A7A]">
+                    <Search className="size-[18px]" />
                   </span>
                   <input
                     type="text"
                     value={searchTerm}
                     onChange={(event) => onSearchChange(event.target.value)}
                     placeholder={searchPlaceholder}
-                    className="h-10 w-full rounded-xl border border-border bg-background-surface pr-4 pl-10 text-sm text-text-emphasis outline-none transition placeholder:text-text-faint hover:border-border-strong focus:border-primary focus:ring-4 focus:ring-primary/15"
+                    className="h-[44px] w-full rounded-[14px] border border-white/85 bg-white/62 pr-4 pl-10 text-[13px] font-medium text-[#1E1B4B] outline-none backdrop-blur-md transition placeholder:text-[#4C4A7A]/75 hover:bg-white/80 focus:border-[#4F46E5]/40"
                   />
                 </div>
               ) : null}
@@ -182,6 +182,7 @@ export function TableLayout<T>({
                       loading={button.loading}
                       disabled={button.disabled || button.loading}
                       onClick={button.onClick}
+                      className="h-[44px] rounded-[14px] px-4"
                     >
                       {Icon && button.iconPlacement !== 'right' ? (
                         <Icon className="size-4" />
@@ -201,8 +202,8 @@ export function TableLayout<T>({
             ) : null}
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-border bg-background-surface shadow-card">
-            <p className="px-4 pt-3 text-[10px] font-semibold tracking-[0.14em] text-text-faint uppercase sm:hidden">
+          <div className="overflow-hidden rounded-[22px] border border-white/85 bg-white/62 backdrop-blur-md shadow-[0_4px_24px_rgba(79,70,229,0.06)]">
+            <p className="px-4 pt-3 text-[10px] font-semibold tracking-[0.14em] text-[#4C4A7A] uppercase sm:hidden">
               Swipe to explore
             </p>
 
@@ -212,8 +213,8 @@ export function TableLayout<T>({
               }`}
             >
               <Table>
-                <TableHeader className="bg-background-muted/80">
-                  <TableRow className="border-b border-border">
+                <TableHeader className="bg-white/70 backdrop-blur-md">
+                  <TableRow className="border-b border-[rgba(79,70,229,0.12)]">
                     {columns.map((column) => {
                       const sortField = column.sortKey ?? String(column.key)
                       const isActive = sortBy === sortField
@@ -226,9 +227,9 @@ export function TableLayout<T>({
                               ? () => onSort(sortField)
                               : undefined
                           }
-                          className={`text-[11px] font-semibold tracking-[0.08em] text-text-muted uppercase ${
+                          className={`text-[12px] font-semibold tracking-[0.02em] text-[#4338CA] ${
                             column.sortable
-                              ? 'cursor-pointer select-none hover:text-primary'
+                              ? 'cursor-pointer select-none hover:text-[#312E81]'
                               : ''
                           }`}
                         >
@@ -239,15 +240,15 @@ export function TableLayout<T>({
                                 <ChevronUp
                                   className={`size-3 ${
                                     isActive && sortOrder === 'asc'
-                                      ? 'text-primary'
-                                      : 'text-text-disabled'
+                                      ? 'text-[#4F46E5]'
+                                      : 'text-[#4C4A7A]/40'
                                   }`}
                                 />
                                 <ChevronDown
                                   className={`size-3 ${
                                     isActive && sortOrder === 'desc'
-                                      ? 'text-primary'
-                                      : 'text-text-disabled'
+                                      ? 'text-[#4F46E5]'
+                                      : 'text-[#4C4A7A]/40'
                                   }`}
                                 />
                               </span>
@@ -257,7 +258,7 @@ export function TableLayout<T>({
                       )
                     })}
                     {actions.length > 0 ? (
-                      <TableHead className="text-right text-[11px] font-semibold tracking-[0.08em] text-text-muted uppercase">
+                      <TableHead className="text-right text-[12px] font-semibold tracking-[0.02em] text-[#4338CA]">
                         Actions
                       </TableHead>
                     ) : null}
@@ -269,16 +270,16 @@ export function TableLayout<T>({
                     Array.from({ length: skeletonRowCount }).map((_, index) => (
                       <TableRow
                         key={index}
-                        className="border-b border-border-subtle"
+                        className="border-b border-[rgba(79,70,229,0.12)]"
                       >
                         {columns.map((column) => (
                           <TableCell key={String(column.key)}>
-                            <Skeleton className="h-4 w-full" />
+                            <Skeleton className="h-4 w-full bg-indigo-100/60" />
                           </TableCell>
                         ))}
                         {actions.length > 0 ? (
                           <TableCell>
-                            <Skeleton className="ml-auto h-4 w-8" />
+                            <Skeleton className="ml-auto h-4 w-8 bg-indigo-100/60" />
                           </TableCell>
                         ) : null}
                       </TableRow>
@@ -298,18 +299,16 @@ export function TableLayout<T>({
                           onClick={
                             onRowClick ? () => onRowClick(row) : undefined
                           }
-                          className={`border-b border-border-subtle last:border-0 ${
+                          className={`border-b border-[rgba(79,70,229,0.12)] last:border-0 ${
                             onRowClick ? 'cursor-pointer' : ''
                           } ${
-                            isSelected
-                              ? 'bg-primary-soft'
-                              : 'hover:bg-primary-soft/70'
+                            isSelected ? 'bg-[#EEF2FF]/80' : 'hover:bg-white/45'
                           }`}
                         >
                           {columns.map((column) => (
                             <TableCell
                               key={String(column.key)}
-                              className={`text-sm font-medium text-secondary ${
+                              className={`text-[13px] font-medium text-[#1E1B4B] ${
                                 column.isNowrap ? 'whitespace-nowrap' : ''
                               }`}
                             >
@@ -343,7 +342,7 @@ export function TableLayout<T>({
                                       aria-label={action.label}
                                       disabled={isDisabled}
                                       onClick={() => action.onClick(row)}
-                                      className="inline-flex size-8 items-center justify-center rounded-lg text-text-muted transition hover:bg-primary-soft hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+                                      className="inline-flex size-8 items-center justify-center rounded-[10px] text-[#312E81] transition hover:bg-white hover:text-[#4F46E5] disabled:cursor-not-allowed disabled:opacity-40"
                                     >
                                       {renderActionIcon(action.icon)}
                                     </button>
@@ -359,7 +358,7 @@ export function TableLayout<T>({
                     <TableRow>
                       <TableCell
                         colSpan={columns.length + (actions.length > 0 ? 1 : 0)}
-                        className="py-12 text-center text-sm text-text-muted"
+                        className="py-12 text-center text-sm text-[#4C4A7A]"
                       >
                         {emptyMessage}
                       </TableCell>

@@ -94,7 +94,7 @@ export function EmployeeForm({
             </p>
           ) : null}
 
-          <div className="grid gap-4 sm:grid-cols-2 rounded-2xl border border-border bg-background-surface p-5 shadow-card">
+          <div className="grid gap-4 sm:grid-cols-2 rounded-2xl border border-border bg-glass-panel p-5 shadow-card">
             <InputField<EmployeeFormValues>
               name="firstName"
               label="First Name"

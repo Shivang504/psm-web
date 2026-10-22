@@ -1,4 +1,4 @@
-import { Filter, X } from 'lucide-react'
+import { ChevronDown, X } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
@@ -13,6 +13,7 @@ type FilterDropdownProps = {
   placeholder?: string
   onChange: (value: string) => void
   clearbutton?: boolean
+  className?: string
 }
 
 export function FilterDropdown({
@@ -21,6 +22,7 @@ export function FilterDropdown({
   placeholder = 'Select filter',
   onChange,
   clearbutton = true,
+  className = '',
 }: FilterDropdownProps) {
   const [open, setOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement | null>(null)
@@ -36,9 +38,9 @@ export function FilterDropdown({
     if (!rect) return
 
     setMenuStyle({
-      top: rect.bottom + 8,
+      top: rect.bottom + 6,
       left: rect.left,
-      minWidth: rect.width,
+      minWidth: Math.max(rect.width, 160),
     })
   }, [])
 
@@ -54,13 +56,22 @@ export function FilterDropdown({
       setOpen(false)
     }
 
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false)
+    }
+
     document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
   }, [])
 
   useEffect(() => {
     if (!open) return
 
+    updateMenuPosition()
     window.addEventListener('resize', updateMenuPosition)
     window.addEventListener('scroll', updateMenuPosition, true)
     return () => {
@@ -69,36 +80,56 @@ export function FilterDropdown({
     }
   }, [open, updateMenuPosition])
 
-  const selectedLabel =
-    options.find((option) => option.value === selected)?.label || placeholder
+  const selectedOption = options.find((option) => option.value === selected)
+  const selectedLabel = selectedOption?.label || placeholder
+  const isSelected = Boolean(selected)
 
   return (
-    <div ref={dropdownRef} className="relative w-full max-w-40">
+    <div ref={dropdownRef} className={`relative shrink-0 ${className}`}>
       <button
         type="button"
+        aria-haspopup="listbox"
+        aria-expanded={open}
         onClick={() => {
           updateMenuPosition()
           setOpen((current) => !current)
         }}
-        className={`flex h-10 w-full min-w-28 cursor-pointer items-center justify-between gap-2 rounded-xl border px-3 text-sm outline-none transition ${
-          selected
-            ? 'border-primary bg-primary-soft text-primary'
-            : 'border-border bg-background-surface text-secondary hover:border-border-strong'
+        className={`flex h-[44px] cursor-pointer items-center justify-between gap-2 rounded-[14px] border px-4 text-[13px] font-medium transition duration-150 select-none shadow-[0_2px_8px_rgba(79,70,229,0.04)] ${
+          isSelected
+            ? 'border-[#4F46E5]/40 bg-[#EEF2FF]/90 text-[#3730A3] font-semibold'
+            : 'border-white/85 bg-white/62 backdrop-blur-md text-[#1E1B4B] hover:bg-white/80'
         }`}
       >
-        <Filter className="size-3.5 shrink-0 text-primary" />
-        <span className="truncate text-xs font-semibold">{selectedLabel}</span>
-        {selected && clearbutton ? (
-          <X
-            className="size-4 shrink-0 text-text-faint hover:text-secondary"
+        <span className="truncate max-w-[140px]">{selectedLabel}</span>
+
+        {isSelected && clearbutton ? (
+          <span
+            role="button"
+            tabIndex={0}
+            aria-label={`Clear ${placeholder} filter`}
+            className="inline-flex size-4 items-center justify-center rounded-full text-[#4C4A7A] hover:bg-white hover:text-[#1E1B4B]"
             onClick={(event) => {
               event.stopPropagation()
               onChange('')
               setOpen(false)
             }}
-          />
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.stopPropagation()
+                onChange('')
+                setOpen(false)
+              }
+            }}
+          >
+            <X className="size-3.5" />
+          </span>
         ) : (
-          <span className="size-4 shrink-0" />
+          <ChevronDown
+            className={`size-4 text-[#4C4A7A] transition-transform duration-200 ${
+              open ? 'rotate-180' : ''
+            }`}
+            aria-hidden="true"
+          />
         )}
       </button>
 
@@ -106,7 +137,9 @@ export function FilterDropdown({
         ? createPortal(
             <div
               ref={menuRef}
-              className="fixed z-50 max-h-60 overflow-y-auto rounded-xl border border-border bg-background-surface py-1 shadow-card"
+              role="listbox"
+              aria-label={placeholder}
+              className="glass-dropdown fixed z-50 max-h-64 overflow-y-auto p-1.5 shadow-[0_12px_36px_rgba(30,27,75,0.16)]"
               style={{
                 top: menuStyle.top,
                 left: menuStyle.left,
@@ -114,25 +147,32 @@ export function FilterDropdown({
               }}
             >
               {options.length ? (
-                options.map((option) => (
-                  <button
-                    key={option.value}
-                    type="button"
-                    onClick={() => {
-                      onChange(option.value)
-                      setOpen(false)
-                    }}
-                    className={`block w-full cursor-pointer px-4 py-2 text-left text-sm whitespace-nowrap transition hover:bg-primary-soft ${
-                      selected === option.value
-                        ? 'bg-primary-soft font-semibold text-primary'
-                        : 'text-text-emphasis'
-                    }`}
-                  >
-                    {option.label}
-                  </button>
-                ))
+                options.map((option) => {
+                  const isCurrent = selected === option.value
+                  return (
+                    <button
+                      key={option.value}
+                      role="option"
+                      aria-selected={isCurrent}
+                      type="button"
+                      onClick={() => {
+                        onChange(option.value)
+                        setOpen(false)
+                      }}
+                      className={`block w-full cursor-pointer rounded-[10px] px-3.5 py-2 text-left text-[13px] whitespace-nowrap transition ${
+                        isCurrent
+                          ? 'bg-[#4F46E5] text-white font-semibold'
+                          : 'text-[#1E1B4B] hover:bg-[#EEF2FF] hover:text-[#3730A3]'
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  )
+                })
               ) : (
-                <p className="px-4 py-2 text-sm text-text-muted">No roles</p>
+                <p className="px-4 py-2 text-[13px] text-[#4C4A7A]">
+                  No options
+                </p>
               )}
             </div>,
             document.body,

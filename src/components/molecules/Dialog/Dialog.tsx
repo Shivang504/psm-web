@@ -1,6 +1,5 @@
 import { X } from 'lucide-react'
 import { useEffect, type ReactNode } from 'react'
-import { Button } from '../../atoms/Button'
 
 type DialogProps = {
   open: boolean
@@ -47,7 +46,7 @@ export function Dialog({
       <button
         type="button"
         aria-label="Close dialog"
-        className="absolute inset-0 bg-background-overlay/45"
+        className="absolute inset-0 bg-[#1E1B4B]/30 backdrop-blur-xs transition-opacity"
         onClick={() => {
           if (closeOnOutsideClick) onClose()
         }}
@@ -57,14 +56,14 @@ export function Dialog({
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? 'dialog-title' : undefined}
-        className="relative z-10 w-full max-w-md rounded-2xl border border-border bg-background-surface p-6 shadow-dialog"
+        className="relative z-10 w-full max-w-md rounded-[22px] border border-white/90 bg-white/90 p-6 backdrop-blur-2xl shadow-[0_24px_60px_-15px_rgba(30,27,75,0.25)]"
       >
         {closeOnOutsideClick ? (
           <button
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="absolute top-3 right-3 inline-flex size-8 items-center justify-center rounded-lg text-text-faint transition hover:bg-border-subtle hover:text-secondary"
+            className="absolute top-4 right-4 inline-flex size-[36px] items-center justify-center rounded-[12px] text-[#4C4A7A] transition hover:bg-white hover:text-[#1E1B4B]"
           >
             <X className="size-4" />
           </button>
@@ -73,26 +72,33 @@ export function Dialog({
         {title ? (
           <h2
             id="dialog-title"
-            className="pr-8 text-lg font-semibold text-text-strong"
+            className="pr-8 text-lg font-bold text-[#1E1B4B]"
           >
             {title}
           </h2>
         ) : null}
 
-        <div
-          className={title ? 'mt-3 text-sm leading-6 text-text-secondary' : ''}
-        >
+        <div className={title ? 'mt-3 text-sm leading-6 text-[#4C4A7A]' : ''}>
           {children}
         </div>
 
         {handleSubmit ? (
-          <div className="mt-5 flex justify-end gap-2">
-            <Button variant="ghost" size="compact" onClick={onClose}>
+          <div className="mt-6 flex justify-end gap-2.5">
+            <button
+              type="button"
+              onClick={onClose}
+              className="inline-flex h-[40px] cursor-pointer items-center justify-center rounded-[14px] border border-[rgba(79,70,229,0.2)] bg-white/70 px-4 text-xs font-semibold text-[#312E81] transition hover:bg-white"
+            >
               Cancel
-            </Button>
-            <Button size="compact" loading={loading} onClick={handleSubmit}>
-              {label}
-            </Button>
+            </button>
+            <button
+              type="button"
+              disabled={loading}
+              onClick={handleSubmit}
+              className="inline-flex h-[40px] cursor-pointer items-center justify-center rounded-[14px] bg-[#DC2626] px-4 text-xs font-semibold text-white shadow-sm transition hover:bg-[#B91C1C] disabled:opacity-50"
+            >
+              {loading ? 'Processing...' : label}
+            </button>
           </div>
         ) : null}
       </div>
