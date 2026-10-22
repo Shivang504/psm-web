@@ -39,7 +39,7 @@ export function Avatar({
   initials,
   variant = 'auto',
   className = '',
-  size = 38,
+  size = 28,
   ...props
 }: AvatarProps) {
   const displayInitials = initials ?? getInitials(name)
@@ -50,7 +50,7 @@ export function Avatar({
     <i
       aria-hidden="true"
       style={{ width: size, height: size }}
-      className={`not-italic inline-flex shrink-0 items-center justify-center rounded-full text-[13px] font-semibold select-none ${variantStyles[resolvedVariant]} ${className}`}
+      className={`not-italic inline-flex shrink-0 items-center justify-center rounded-full text-[10px] font-semibold select-none ${variantStyles[resolvedVariant]} ${className}`}
       {...props}
     >
       {displayInitials}

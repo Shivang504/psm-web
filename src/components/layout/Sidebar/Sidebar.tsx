@@ -1,6 +1,8 @@
 import {
   BarChart3,
   CalendarCheck,
+  ChevronLeft,
+  ChevronRight,
   LogOut,
   Settings,
   Users,
@@ -26,6 +28,7 @@ export interface SidebarProps {
   onSignOut: () => void
   onNavigate?: () => void
   collapsed?: boolean
+  onToggleCollapse?: () => void
   className?: string
 }
 
@@ -34,6 +37,7 @@ export function Sidebar({
   onSignOut,
   onNavigate,
   collapsed = false,
+  onToggleCollapse,
   className = '',
 }: SidebarProps) {
   return (
@@ -44,15 +48,37 @@ export function Sidebar({
     >
       {/* Brand Header */}
       <div
-        className={`flex items-center gap-3 pb-6 ${
-          collapsed ? 'justify-center px-0' : 'px-1.5'
+        className={`flex items-center pb-5 transition-all ${
+          collapsed
+            ? 'flex-col justify-center gap-2 px-0'
+            : 'justify-between px-1.5'
         }`}
       >
-        <img
-          src="/logo.png"
-          alt="The PSM Application Logo"
-          className="h-14 w-auto object-contain"
-        />
+        <div className="flex items-center gap-2">
+          <img
+            src="/logo.png"
+            alt="The PSM Application Logo"
+            className={`w-auto object-contain transition-all ${
+              collapsed ? 'h-8 max-w-[48px]' : 'h-11'
+            }`}
+          />
+        </div>
+
+        {onToggleCollapse ? (
+          <button
+            type="button"
+            onClick={onToggleCollapse}
+            title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            className="hidden md:inline-flex size-[32px] cursor-pointer items-center justify-center rounded-[10px] border border-white/85 bg-white/70 text-[#312E81] transition duration-150 hover:bg-white hover:text-[#4F46E5] hover:border-[#4F46E5]/30 shadow-xs"
+          >
+            {collapsed ? (
+              <ChevronRight className="size-4" />
+            ) : (
+              <ChevronLeft className="size-4" />
+            )}
+          </button>
+        ) : null}
       </div>
 
       {/* Navigation Links */}

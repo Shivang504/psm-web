@@ -30,7 +30,12 @@ export function AdminLayout({
   children,
 }: AdminLayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [tabletCollapsed, setTabletCollapsed] = useState(false)
+  const [collapsed, setCollapsed] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth >= 768 && window.innerWidth < 1200
+    }
+    return false
+  })
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const mobile = useAppSelector((state) => state.auth.mobile)
@@ -38,17 +43,23 @@ export function AdminLayout({
   const profileLoading = useAppSelector((state) => state.profile.loading)
   const profileError = useAppSelector((state) => state.profile.error)
 
-  // Handle auto-collapse on tablet screens
+  // Handle auto-collapse when crossing screen breakpoints
   useEffect(() => {
+    let lastWidth = window.innerWidth
+
     const handleResize = () => {
-      if (window.innerWidth >= 768 && window.innerWidth < 1200) {
-        setTabletCollapsed(true)
-      } else {
-        setTabletCollapsed(false)
+      const currentWidth = window.innerWidth
+      const wasTablet = lastWidth >= 768 && lastWidth < 1200
+      const isTablet = currentWidth >= 768 && currentWidth < 1200
+
+      if (!wasTablet && isTablet) {
+        setCollapsed(true)
+      } else if (wasTablet && currentWidth >= 1200) {
+        setCollapsed(false)
       }
+      lastWidth = currentWidth
     }
 
-    handleResize()
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
@@ -94,7 +105,8 @@ export function AdminLayout({
         <Sidebar
           mobile={mobile}
           onSignOut={handleSignOut}
-          collapsed={tabletCollapsed}
+          collapsed={collapsed}
+          onToggleCollapse={() => setCollapsed((prev) => !prev)}
         />
       </div>
 

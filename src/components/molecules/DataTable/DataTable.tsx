@@ -365,7 +365,7 @@ export function DataTable<T>({
                 <div
                   key={idx}
                   style={{ gridTemplateColumns: gridTemplate }}
-                  className="grid items-center gap-3 px-5 h-[62px] animate-pulse"
+                  className="grid items-center gap-3 px-5 h-[44px] animate-pulse"
                 >
                   {columns.map((col, colIdx) => (
                     <div
@@ -427,7 +427,7 @@ export function DataTable<T>({
                     key={rowId}
                     onClick={() => onRowClick?.(row)}
                     style={{ gridTemplateColumns: gridTemplate }}
-                    className={`grid items-center gap-3 px-5 h-[62px] text-[13px] text-[#1E1B4B] cursor-pointer transition duration-150 ${
+                    className={`grid items-center gap-3 px-5 h-[44px] text-[13px] text-[#1E1B4B] cursor-pointer transition duration-150 ${
                       isSelected ? 'bg-[#EEF2FF]/80' : 'hover:bg-white/45'
                     }`}
                   >

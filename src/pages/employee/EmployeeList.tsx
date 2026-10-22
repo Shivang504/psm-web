@@ -6,7 +6,6 @@ import { Badge } from '../../components/atoms/Badge'
 import { StatusPill } from '../../components/atoms/StatusPill'
 import {
   DataTable,
-  AreasCell,
   type ColumnType,
   type ActionType,
 } from '../../components/molecules/DataTable'
@@ -74,26 +73,6 @@ function dispatchUserList(dispatch: AppDispatch, nextQuery: UserListQuery) {
       },
     },
   })
-}
-
-function parseAreas(user: UserListItem): string[] {
-  const territories = user.config?.territories?.trim()
-  if (territories) {
-    return territories
-      .split(/[,;\n]+/)
-      .map((item) => item.trim())
-      .filter(Boolean)
-  }
-
-  const location = user.config?.location?.trim()
-  if (location) {
-    return location
-      .split(/[,;\n]+/)
-      .map((item) => item.trim())
-      .filter(Boolean)
-  }
-
-  return []
 }
 
 export default function HomePage() {
@@ -292,28 +271,34 @@ export default function HomePage() {
     () => [
       {
         key: 'employee',
-        label: 'Employee',
+        label: 'Name',
         sortable: true,
         sortKey: 'first_name',
         width: '2.3fr',
         render: (row) => {
           const name = displayName(row)
-          const code = displayValue(row.config?.employeeCode)
 
           return (
             <div className="flex items-center gap-3 min-w-0 pr-2">
               <Avatar name={name} />
-              <div className="min-w-0 truncate">
-                <b className="block text-[14px] font-semibold text-[#1E1B4B] truncate">
-                  {name}
-                </b>
-                <span className="text-[12px] text-[#4C4A7A] block truncate">
-                  {code}
-                </span>
-              </div>
+              <b className="block text-[14px] font-semibold text-[#1E1B4B] truncate">
+                {name}
+              </b>
             </div>
           )
         },
+      },
+      {
+        key: 'employeeCode',
+        label: 'Code',
+        sortable: true,
+        sortKey: 'employeeCode', // Replace with the actual API sort key if different
+        width: '1.5fr',
+        render: (row) => (
+          <span className="text-[12px] text-[#4C4A7A]">
+            {displayValue(row.config?.employeeCode)}
+          </span>
+        ),
       },
       {
         key: 'role',
@@ -342,12 +327,12 @@ export default function HomePage() {
           )
         },
       },
-      {
-        key: 'areas',
-        label: 'Areas',
-        width: '2.2fr',
-        render: (row) => <AreasCell areas={parseAreas(row)} />,
-      },
+      // {
+      //   key: 'areas',
+      //   label: 'Areas',
+      //   width: '2.2fr',
+      //   render: (row) => <AreasCell areas={parseAreas(row)} />,
+      // },
       {
         key: 'state',
         label: 'State',
