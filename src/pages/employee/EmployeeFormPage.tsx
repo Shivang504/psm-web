@@ -40,7 +40,6 @@ import {
   userListParams,
 } from '../../utils/employee'
 import type {
-  ApiResponse,
   Designation,
   DesignationListResponse,
   EmployeeFormValues,
@@ -197,7 +196,6 @@ export default function EmployeeFormPage() {
     const finishDesignations = () => {
       if (settled || designationList === undefined || !roleLoaded) return
       settled = true
-      const firstDesignation = designationList[0]?.id ?? ''
       dispatch(
         fetchDesignationsSuccess({
           designations: designationList,
@@ -214,7 +212,7 @@ export default function EmployeeFormPage() {
       dispatchUserList(dispatch, {
         ...currentQuery,
         role,
-        designation: currentQuery.designation || firstDesignation,
+        designation: currentQuery.designation,
         search: currentQuery.search ?? '',
       })
     }
@@ -305,42 +303,25 @@ export default function EmployeeFormPage() {
         payload: {
           query: `/users/${id}`,
           method: 'PUT',
+          showToast: true,
           variables: {
             first_name: values.firstName.trim(),
             last_name: values.lastName.trim(),
             email: values.email.trim(),
             contact_no: values.phone.trim(),
-            role_id: employeeRoleId,
+            // role_id: employeeRoleId,
             role: 'employee',
             status: editingUser?.status || 'Active',
-            designation_id: values.designation,
+            // designation_id: values.designation,
             config: buildEmployeeConfig(
               values,
               formOptions.regions,
               readConfig(editingUser?.config),
             ),
           },
-          onSuccess: (response: ApiResponse<unknown>) => {
-            dispatch({
-              type: sagaActions.UPDATE_EMPLOYEE_DESIGNATION,
-              payload: {
-                query: `/users/designation/${id}`,
-                method: 'PUT',
-                variables: { designationId: values.designation },
-                showToast: true,
-                successMessage:
-                  response.meta?.message ||
-                  response.message ||
-                  'Employee updated',
-                onSuccess: () => {
-                  dispatch(updateEmployeeSuccess())
-                  reloadUserList(dispatch)
-                },
-                onFailure: (message: string) => {
-                  dispatch(updateEmployeeFailure(message))
-                },
-              },
-            })
+          onSuccess: () => {
+            dispatch(updateEmployeeSuccess())
+            reloadUserList(dispatch)
           },
           onFailure: (message: string) => {
             dispatch(updateEmployeeFailure(message))

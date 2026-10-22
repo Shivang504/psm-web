@@ -121,17 +121,13 @@ const usersSlice = createSlice({
         employeeRoleId = '',
         listRoleId = '',
       } = action.payload
-      const firstDesignation = designations[0]?.id ?? ''
       const role = listRoleId || employeeRoleId
 
       state.designationsLoading = false
       state.designations = designations
       if (employeeRoleId) state.employeeRoleId = employeeRoleId
 
-      if (role) {
-        state.query.role = role
-        if (!state.query.designation) state.query.designation = firstDesignation
-      }
+      if (role) state.query.role = role
     },
     fetchDesignationsFailure: (state, action: PayloadAction<string>) => {
       state.designationsLoading = false

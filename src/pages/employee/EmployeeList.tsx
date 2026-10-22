@@ -29,6 +29,7 @@ import {
 } from '../../store/slices/usersSlice'
 import {
   findRoleId,
+  readConfig,
   readDesignations,
   readRoles,
   userListParams,
@@ -238,14 +239,23 @@ export default function HomePage() {
     }, 400)
   }
 
-  const dispatchStatus = (id: string, status: 'Active' | 'Inactive') => {
-    dispatch(updateEmployeeStatus({ id, status }))
+  const dispatchStatus = (row: UserListItem, status: 'Active' | 'Inactive') => {
+    dispatch(updateEmployeeStatus({ id: row.id, status }))
     dispatch({
       type: sagaActions.UPDATE_EMPLOYEE_STATUS,
       payload: {
-        query: `/users/${id}`,
+        query: `/users/${row.id}`,
         method: 'PUT',
-        variables: { status },
+        variables: {
+          id: row.id,
+          first_name: row.first_name ?? '',
+          last_name: row.last_name ?? '',
+          email: row.email ?? '',
+          contact_no: row.contact_no ?? '',
+          role: row.role || 'employee',
+          status,
+          config: readConfig(row.config),
+        },
         showToast: true,
         successMessage: 'Employee status updated',
         onSuccess: () => {
@@ -352,7 +362,7 @@ export default function HomePage() {
             disabled={actionLoading || loading}
             onToggle={() =>
               dispatchStatus(
-                row.id,
+                row,
                 row.status === 'Active' ? 'Inactive' : 'Active',
               )
             }
