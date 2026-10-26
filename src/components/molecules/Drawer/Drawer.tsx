@@ -8,6 +8,7 @@ export type DrawerProps = {
   onClose: () => void
   children: ReactNode
   footer?: ReactNode
+  panelClassName?: string
 }
 
 export function Drawer({
@@ -17,6 +18,7 @@ export function Drawer({
   onClose,
   children,
   footer,
+  panelClassName = 'max-w-xl sm:max-w-2xl',
 }: DrawerProps) {
   useEffect(() => {
     if (!open) return
@@ -52,7 +54,7 @@ export function Drawer({
         role="dialog"
         aria-modal="true"
         aria-labelledby="drawer-title"
-        className="relative z-10 flex h-full w-full max-w-xl flex-col border-l border-white/85 bg-white/85 backdrop-blur-2xl shadow-[0_24px_60px_-15px_rgba(30,27,75,0.25)] rounded-l-[24px] sm:max-w-2xl"
+        className={`relative z-10 flex h-full w-full flex-col rounded-l-[24px] border-l border-white/85 bg-white/85 shadow-[0_24px_60px_-15px_rgba(30,27,75,0.25)] backdrop-blur-2xl ${panelClassName}`}
       >
         {/* Header */}
         <div className="flex items-center justify-between border-b border-[rgba(79,70,229,0.12)] px-6 py-5">
