@@ -3,6 +3,7 @@ import {
   CalendarCheck,
   ChevronLeft,
   ChevronRight,
+  LayoutDashboard,
   LogOut,
   Settings,
   Users,
@@ -17,6 +18,7 @@ export interface NavItemConfig {
 }
 
 const DEFAULT_NAV_ITEMS: NavItemConfig[] = [
+  { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard },
   { label: 'Employee list', to: '/home', icon: Users },
   { label: 'Attendance', to: '/attendance', icon: CalendarCheck },
   { label: 'Reports', to: '/reports', icon: BarChart3 },

@@ -173,3 +173,36 @@ export type TerritoryMasterResponse = ApiResponse<{
     data?: unknown
   }
 }>
+
+export interface DashboardData {
+  order_count?: string | number
+  total_order_value?: number | string | null
+}
+
+export type DashboardResponse = ApiResponse<DashboardData>
+
+export interface TodayAttendanceData {
+  is_start?: number
+  is_end?: number
+  is_leave?: number
+  is_vehicle?: number
+  meter_no?: string
+  start_time?: string
+  [key: string]: unknown
+}
+
+export type TodayAttendanceResponse = ApiResponse<TodayAttendanceData>
+
+export interface StartDayPayload {
+  is_vehicle: number
+  lat: number
+  long: number
+  address: string
+  locality: string
+  pincode: number
+  is_flag: number
+  start_time: string
+  meter_no?: string
+  user_selfie: File | Blob
+  meter_image?: File | Blob
+}

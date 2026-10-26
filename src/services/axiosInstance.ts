@@ -24,6 +24,16 @@ apiClient.interceptors.request.use((config: InternalAxiosRequestConfig) => {
     return Promise.reject(new Error('REACT_APP_BASE_URL is not configured'))
   }
 
+  if (config.url?.startsWith('/api/')) {
+    config.url = config.url.replace(/^\/api/, '')
+  }
+
+  if (config.data instanceof FormData) {
+    // Axios stores this as "content-type". A bracket delete leaves
+    // application/json in place, which turns FormData into JSON and drops files.
+    config.headers.delete('Content-Type')
+  }
+
   if (!config.isPublic) {
     const token = getAccessToken()
 

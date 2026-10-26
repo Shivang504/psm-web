@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AuthGuard, GuestGuard } from './components/AuthGuard'
+import DashboardPage from './pages/dashboard/DashboardPage.tsx'
 import EmployeeFormPage from './pages/employee/EmployeeFormPage.tsx'
 import HomePage from './pages/employee/EmployeeList.tsx'
 import LoginPage from './pages/auth/LoginPage.tsx'
@@ -9,7 +10,7 @@ import { useAppSelector } from './store/hooks'
 function RootRedirect() {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
 
-  return <Navigate to={isAuthenticated ? '/home' : '/login'} replace />
+  return <Navigate to={isAuthenticated ? '/dashboard' : '/login'} replace />
 }
 
 function App() {
@@ -31,6 +32,14 @@ function App() {
             <GuestGuard>
               <VerifyOtpPage />
             </GuestGuard>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <AuthGuard>
+              <DashboardPage />
+            </AuthGuard>
           }
         />
         <Route

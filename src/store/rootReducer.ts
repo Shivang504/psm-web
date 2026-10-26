@@ -1,10 +1,12 @@
 import { combineReducers } from '@reduxjs/toolkit'
 import authReducer from './slices/authSlice'
+import dashboardReducer from './slices/dashboardSlice'
 import profileReducer from './slices/profileSlice'
 import usersReducer from './slices/usersSlice'
 
 const rootReducer = combineReducers({
   auth: authReducer,
+  dashboard: dashboardReducer,
   profile: profileReducer,
   users: usersReducer,
 })
