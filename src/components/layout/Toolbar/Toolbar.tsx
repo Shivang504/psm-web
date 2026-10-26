@@ -1,7 +1,7 @@
 import { Search, X } from 'lucide-react'
 import type { ReactNode } from 'react'
-import { StatusTabs } from '../../atoms/StatusTabs'
-import type { UserStatusTab } from '../../../utils/types'
+import { StatusTabs } from '@/components/atoms/StatusTabs'
+import type { UserStatusTab } from '@/utils/types'
 
 export interface ToolbarProps {
   searchValue?: string

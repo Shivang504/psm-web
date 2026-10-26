@@ -8,12 +8,12 @@ import {
   UserCheck,
 } from 'lucide-react'
 import { useMemo } from 'react'
-import { Avatar } from '../../components/atoms/Avatar'
-import { Badge } from '../../components/atoms/Badge'
-import { StatusPill } from '../../components/atoms/StatusPill'
-import { Drawer } from '../../components/molecules/Drawer'
-import type { UserListItem } from '../../utils/types'
-import { displayName, displayValue } from '../../utils/helper'
+import { Avatar } from '@/components/atoms/Avatar'
+import { Badge } from '@/components/atoms/Badge'
+import { StatusPill } from '@/components/atoms/StatusPill'
+import { Drawer } from '@/components/molecules/Drawer'
+import type { UserListItem } from '@/utils/types'
+import { displayName, displayValue } from '@/utils/helper'
 
 export interface EmployeeDrawerProps {
   user: UserListItem | null

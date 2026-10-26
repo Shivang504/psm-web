@@ -1,6 +1,6 @@
 import { takeLatest } from 'redux-saga/effects'
-import { sagaActions } from '../../actions'
-import { genericSaga } from '../genericSaga/genericSaga'
+import { sagaActions } from '@/store/actions'
+import { genericSaga } from '@/store/sagas/genericSaga/genericSaga'
 
 export function* profileSaga() {
   yield takeLatest(sagaActions.GET_PROFILE, genericSaga)

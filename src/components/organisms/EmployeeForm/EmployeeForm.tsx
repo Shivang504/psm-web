@@ -1,10 +1,10 @@
 import { FormProvider } from 'react-hook-form'
 import * as yup from 'yup'
-import { FormLayout } from '../../layout/FormLayout'
-import { InputField } from '../../atoms/InputField'
-import { SelectField } from '../../atoms/SelectField'
-import useFormHandler from '../../../hooks/useFormHandler'
-import type { Designation, EmployeeFormValues } from '../../../utils/types'
+import { FormLayout } from '@/components/layout/FormLayout'
+import { InputField } from '@/components/atoms/InputField'
+import { SelectField } from '@/components/atoms/SelectField'
+import useFormHandler from '@/hooks/useFormHandler'
+import type { Designation, EmployeeFormValues } from '@/utils/types'
 
 type EmployeeFormProps = {
   designations: Designation[]

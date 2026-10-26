@@ -1,6 +1,6 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios'
-import { clearAuthSession, getAccessToken } from '../utils/auth'
-import type { ApiResponse } from '../utils/types'
+import { clearAuthSession, getAccessToken } from '@/utils/auth'
+import type { ApiResponse } from '@/utils/types'
 
 declare module 'axios' {
   export interface AxiosRequestConfig {

@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import type { DashboardData, TodayAttendanceData } from '../../utils/types'
+import type { DashboardData, TodayAttendanceData } from '@/utils/types'
 import { logout } from './authSlice'
 
 export interface DashboardState {

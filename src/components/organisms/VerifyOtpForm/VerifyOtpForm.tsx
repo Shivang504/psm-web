@@ -3,10 +3,10 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { FormProvider } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import * as yup from 'yup'
-import useFormHandler from '../../../hooks/useFormHandler'
-import { validationSchema } from '../../../utils/validationSchema'
-import { Button } from '../../atoms/Button'
-import { OtpField } from '../../atoms/OtpField'
+import useFormHandler from '@/hooks/useFormHandler'
+import { validationSchema } from '@/utils/validationSchema'
+import { Button } from '@/components/atoms/Button'
+import { OtpField } from '@/components/atoms/OtpField'
 
 const RESEND_SECONDS = 45
 

@@ -6,10 +6,10 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import type { ReactNode } from 'react'
-import { Button } from '../../atoms/Button'
-import { Skeleton } from '../../atoms/Skeleton'
-import { Dialog } from '../../molecules/Dialog'
-import { Pagination } from '../../molecules/Pagination'
+import { Button } from '@/components/atoms/Button'
+import { Skeleton } from '@/components/atoms/Skeleton'
+import { Dialog } from '@/components/molecules/Dialog'
+import { Pagination } from '@/components/molecules/Pagination'
 import {
   Table,
   TableBody,
@@ -17,7 +17,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../../molecules/Table'
+} from '@/components/molecules/Table'
 
 export type ColumnType<T> = {
   key: keyof T | string

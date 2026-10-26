@@ -1,23 +1,23 @@
 import { Eye, Pencil, Power, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Avatar } from '../../components/atoms/Avatar'
-import { Badge } from '../../components/atoms/Badge'
-import { StatusPill } from '../../components/atoms/StatusPill'
+import { Avatar } from '@/components/atoms/Avatar'
+import { Badge } from '@/components/atoms/Badge'
+import { StatusPill } from '@/components/atoms/StatusPill'
 import {
   DataTable,
   type ColumnType,
   type ActionType,
-} from '../../components/molecules/DataTable'
-import { Dialog } from '../../components/molecules/Dialog'
-import { FilterDropdown } from '../../components/molecules/FilterDropdown'
-import { PageHeader } from '../../components/layout/PageHeader'
-import { Toolbar } from '../../components/layout/Toolbar'
-import { AdminLayout } from '../../components/organisms/AdminLayout'
+} from '@/components/molecules/DataTable'
+import { Dialog } from '@/components/molecules/Dialog'
+import { FilterDropdown } from '@/components/molecules/FilterDropdown'
+import { PageHeader } from '@/components/layout/PageHeader'
+import { Toolbar } from '@/components/layout/Toolbar'
+import { AdminLayout } from '@/components/organisms/AdminLayout'
 import { EmployeeDrawer } from './EmployeeDrawer'
-import { sagaActions } from '../../store/actions'
-import { store, type AppDispatch } from '../../store'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { sagaActions } from '@/store/actions'
+import { store, type AppDispatch } from '@/store'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import {
   cancelDeleteEmployee,
   deleteEmployee,
@@ -33,14 +33,14 @@ import {
   setSelectedUserId,
   updateEmployeeStatus,
   updateEmployeeStatusFinished,
-} from '../../store/slices/usersSlice'
+} from '@/store/slices/usersSlice'
 import {
   findRoleId,
   readConfig,
   readDesignations,
   readRoles,
   userListParams,
-} from '../../utils/employee'
+} from '@/utils/employee'
 import type {
   Designation,
   DesignationListResponse,
@@ -48,8 +48,8 @@ import type {
   UserListItem,
   UserListQuery,
   UserListResponse,
-} from '../../utils/types'
-import { displayName, displayValue } from '../../utils/helper'
+} from '@/utils/types'
+import { displayName, displayValue } from '@/utils/helper'
 
 function dispatchUserList(dispatch: AppDispatch, nextQuery: UserListQuery) {
   dispatch(fetchUserList(nextQuery))

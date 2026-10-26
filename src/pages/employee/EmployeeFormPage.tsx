@@ -2,13 +2,13 @@ import { ArrowLeft } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import toast from 'react-hot-toast'
 import { useNavigate, useParams } from 'react-router-dom'
-import { Skeleton } from '../../components/atoms/Skeleton'
-import { PageHeader } from '../../components/layout/PageHeader'
-import { AdminLayout } from '../../components/organisms/AdminLayout'
-import { EmployeeForm } from '../../components/organisms/EmployeeForm'
-import { sagaActions } from '../../store/actions'
-import { store, type AppDispatch } from '../../store'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { Skeleton } from '@/components/atoms/Skeleton'
+import { PageHeader } from '@/components/layout/PageHeader'
+import { AdminLayout } from '@/components/organisms/AdminLayout'
+import { EmployeeForm } from '@/components/organisms/EmployeeForm'
+import { sagaActions } from '@/store/actions'
+import { store, type AppDispatch } from '@/store'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import {
   clearEmployeeFormState,
   createEmployee,
@@ -29,7 +29,7 @@ import {
   updateEmployee,
   updateEmployeeFailure,
   updateEmployeeSuccess,
-} from '../../store/slices/usersSlice'
+} from '@/store/slices/usersSlice'
 import {
   buildEmployeeConfig,
   findRoleId,
@@ -40,7 +40,7 @@ import {
   readRegions,
   readRoles,
   userListParams,
-} from '../../utils/employee'
+} from '@/utils/employee'
 import type {
   Designation,
   DesignationListResponse,
@@ -53,8 +53,8 @@ import type {
   UserListItem,
   UserListQuery,
   UserListResponse,
-} from '../../utils/types'
-import { displayName } from '../../utils/helper'
+} from '@/utils/types'
+import { displayName } from '@/utils/helper'
 
 function toFormValues(
   user: UserListItem,

@@ -6,7 +6,7 @@ import type {
   EmployeeFormValues,
   UserListItem,
   UserListQuery,
-} from '../../utils/types'
+} from '@/utils/types'
 
 export interface UsersState {
   items: UserListItem[]

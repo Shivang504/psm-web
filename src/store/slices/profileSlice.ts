@@ -1,6 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import { getStoredRoleId } from '../../utils/auth'
-import type { UserProfile } from '../../utils/types'
+import { getStoredRoleId } from '@/utils/auth'
+import type { UserProfile } from '@/utils/types'
 import { logout } from './authSlice'
 
 export interface ProfileState {

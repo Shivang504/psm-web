@@ -1,18 +1,18 @@
 import { Menu, X } from 'lucide-react'
 import { useEffect, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Sidebar } from '../../layout/Sidebar'
-import { PageHeader } from '../../layout/PageHeader'
-import { sagaActions } from '../../../store/actions'
-import { logout } from '../../../store/slices/authSlice'
+import { Sidebar } from '@/components/layout/Sidebar'
+import { PageHeader } from '@/components/layout/PageHeader'
+import { sagaActions } from '@/store/actions'
+import { logout } from '@/store/slices/authSlice'
 import {
   fetchProfile,
   fetchProfileFailure,
   fetchProfileSuccess,
-} from '../../../store/slices/profileSlice'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import { clearAuthSession, setStoredRoleId } from '../../../utils/auth'
-import type { ProfileResponse } from '../../../utils/types'
+} from '@/store/slices/profileSlice'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { clearAuthSession, setStoredRoleId } from '@/utils/auth'
+import type { ProfileResponse } from '@/utils/types'
 
 export interface AdminLayoutProps {
   title?: string

@@ -15,8 +15,8 @@ import {
   type MouseEvent,
 } from 'react'
 import { createPortal } from 'react-dom'
-import { Badge } from '../../atoms/Badge'
-import { Pagination } from '../Pagination'
+import { Badge } from '@/components/atoms/Badge'
+import { Pagination } from '@/components/molecules/Pagination'
 
 export type ColumnType<T> = {
   key: keyof T | string

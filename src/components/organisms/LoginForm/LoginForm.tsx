@@ -2,10 +2,10 @@ import { ArrowRight } from 'lucide-react'
 import { useRef, useState, type FormEvent } from 'react'
 import { FormProvider } from 'react-hook-form'
 import * as yup from 'yup'
-import useFormHandler from '../../../hooks/useFormHandler'
-import { validationSchema } from '../../../utils/validationSchema'
-import { Button } from '../../atoms/Button'
-import { InputField } from '../../atoms/InputField'
+import useFormHandler from '@/hooks/useFormHandler'
+import { validationSchema } from '@/utils/validationSchema'
+import { Button } from '@/components/atoms/Button'
+import { InputField } from '@/components/atoms/InputField'
 
 const loginSchema = yup.object({
   mobile: validationSchema.mobile,

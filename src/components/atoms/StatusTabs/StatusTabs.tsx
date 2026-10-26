@@ -1,4 +1,4 @@
-import type { UserStatusTab } from '../../../utils/types'
+import type { UserStatusTab } from '@/utils/types'
 
 type StatusTabsProps = {
   value: UserStatusTab

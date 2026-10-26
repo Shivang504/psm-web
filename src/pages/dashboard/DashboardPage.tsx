@@ -12,14 +12,14 @@ import {
   Sun,
 } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Avatar } from '../../components/atoms/Avatar'
-import { Badge } from '../../components/atoms/Badge'
-import { Skeleton } from '../../components/atoms/Skeleton'
-import { StatusPill } from '../../components/atoms/StatusPill'
-import { AdminLayout } from '../../components/organisms/AdminLayout'
-import { StartDayModal } from '../../components/organisms/StartDayModal'
-import { sagaActions } from '../../store/actions'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { Avatar } from '@/components/atoms/Avatar'
+import { Badge } from '@/components/atoms/Badge'
+import { Skeleton } from '@/components/atoms/Skeleton'
+import { StatusPill } from '@/components/atoms/StatusPill'
+import { AdminLayout } from '@/components/organisms/AdminLayout'
+import { StartDayModal } from '@/components/organisms/StartDayModal'
+import { sagaActions } from '@/store/actions'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import {
   fetchAttendanceFailure,
   fetchAttendanceStart,
@@ -27,11 +27,8 @@ import {
   fetchDashboardFailure,
   fetchDashboardStart,
   fetchDashboardSuccess,
-} from '../../store/slices/dashboardSlice'
-import type {
-  DashboardResponse,
-  TodayAttendanceResponse,
-} from '../../utils/types'
+} from '@/store/slices/dashboardSlice'
+import type { DashboardResponse, TodayAttendanceResponse } from '@/utils/types'
 
 export default function DashboardPage() {
   const dispatch = useAppDispatch()

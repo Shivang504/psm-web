@@ -13,8 +13,8 @@ import {
 } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
-import { sagaActions } from '../../../store/actions'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+import { sagaActions } from '@/store/actions'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import {
   endDayFailure,
   endDayStart,
@@ -22,8 +22,8 @@ import {
   startDayFailure,
   startDayStart,
   startDaySuccess,
-} from '../../../store/slices/dashboardSlice'
-import type { ApiResponse } from '../../../utils/types'
+} from '@/store/slices/dashboardSlice'
+import type { ApiResponse } from '@/utils/types'
 
 export interface StartDayModalProps {
   open: boolean

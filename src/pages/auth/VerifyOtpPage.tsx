@@ -1,23 +1,19 @@
 import toast from 'react-hot-toast'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
-import { AuthLayout } from '../../components/organisms/AuthLayout'
+import { AuthLayout } from '@/components/organisms/AuthLayout'
 import {
   VerifyOtpForm,
   type VerifyOtpFormValues,
-} from '../../components/organisms/VerifyOtpForm'
-import { sagaActions } from '../../store/actions'
-import { useAppDispatch } from '../../store/hooks'
-import { loginSuccess } from '../../store/slices/authSlice'
+} from '@/components/organisms/VerifyOtpForm'
+import { sagaActions } from '@/store/actions'
+import { useAppDispatch } from '@/store/hooks'
+import { loginSuccess } from '@/store/slices/authSlice'
 import {
   clearPendingMobile,
   getPendingMobile,
   setAuthSession,
-} from '../../utils/auth'
-import type {
-  LoginRequest,
-  LoginResponse,
-  SendOtpRequest,
-} from '../../utils/types'
+} from '@/utils/auth'
+import type { LoginRequest, LoginResponse, SendOtpRequest } from '@/utils/types'
 
 function readRouteMobile(state: unknown): string {
   if (typeof state !== 'object' || state === null || !('mobile' in state)) {

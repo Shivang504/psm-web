@@ -2,8 +2,8 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import axios, { type AxiosError } from 'axios'
 import toast from 'react-hot-toast'
 import { call, cancelled } from 'redux-saga/effects'
-import { apiClient } from '../../../services/axiosInstance'
-import type { ApiResponse } from '../../../utils/types'
+import { apiClient } from '@/services/axiosInstance'
+import type { ApiResponse } from '@/utils/types'
 
 export interface GenericSagaPayload<T> {
   query: string

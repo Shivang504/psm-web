@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom'
-import { AuthLayout } from '../../components/organisms/AuthLayout'
+import { AuthLayout } from '@/components/organisms/AuthLayout'
 import {
   LoginForm,
   type LoginFormValues,
-} from '../../components/organisms/LoginForm'
-import { sagaActions } from '../../store/actions'
-import { useAppDispatch } from '../../store/hooks'
-import { setPendingMobile } from '../../utils/auth'
-import type { SendOtpRequest } from '../../utils/types'
+} from '@/components/organisms/LoginForm'
+import { sagaActions } from '@/store/actions'
+import { useAppDispatch } from '@/store/hooks'
+import { setPendingMobile } from '@/utils/auth'
+import type { SendOtpRequest } from '@/utils/types'
 
 export default function LoginPage() {
   const navigate = useNavigate()

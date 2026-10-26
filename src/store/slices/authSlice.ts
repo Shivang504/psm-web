@@ -1,9 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import {
-  getAccessToken,
-  getRefreshToken,
-  getStoredMobile,
-} from '../../utils/auth'
+import { getAccessToken, getRefreshToken, getStoredMobile } from '@/utils/auth'
 
 export interface AuthState {
   isAuthenticated: boolean
