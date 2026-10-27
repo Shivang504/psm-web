@@ -193,6 +193,46 @@ export interface TodayAttendanceData {
 
 export type TodayAttendanceResponse = ApiResponse<TodayAttendanceData>
 
+export interface AttendanceReportConfig {
+  employeeCode?: string
+  regionName?: string
+  state?: string
+}
+
+export interface AttendanceReportRow {
+  employee?: string | null
+  first_name?: string | null
+  last_name?: string | null
+  contact_no?: string | null
+  date?: string | null
+  startMeter?: string | number | null
+  endMeter?: string | number | null
+  difference?: string | number | null
+  googleDistance?: string | number | null
+  Attdance?: string | null
+  attendance?: string | null
+  config?: AttendanceReportConfig | null
+}
+
+export interface AttendanceReportData {
+  Attendance?: {
+    attendanceList?: AttendanceReportRow[]
+    totalRowsValue?: number
+    total?: number
+    count?: number
+  }
+}
+
+export type AttendanceReportResponse = ApiResponse<AttendanceReportData>
+
+export interface AttendanceReportQuery {
+  startDate: string
+  endDate: string
+  page: number
+  limit: number
+  search: string
+}
+
 export interface StartDayPayload {
   is_vehicle: number
   lat: number

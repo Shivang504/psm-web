@@ -1,5 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AuthGuard, GuestGuard } from './components/AuthGuard'
+import AttendanceReportPage from './pages/attendance/AttendanceReportPage.tsx'
 import DashboardPage from './pages/dashboard/DashboardPage.tsx'
 import EmployeeFormPage from './pages/employee/EmployeeFormPage.tsx'
 import HomePage from './pages/employee/EmployeeList.tsx'
@@ -39,6 +40,14 @@ function App() {
           element={
             <AuthGuard>
               <DashboardPage />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/attendance"
+          element={
+            <AuthGuard>
+              <AttendanceReportPage />
             </AuthGuard>
           }
         />
