@@ -44,20 +44,20 @@ function NoteCard({
         <BuyerTitle label={title} activity={activity} />
       </div>
       <div className="space-y-1 border-t border-border pt-2 text-xs">
-        <p className="flex justify-between gap-3 text-text-muted">
+        <p className="flex gap-3 text-text-muted">
           <span>Meeting with</span>
           <span className="text-right font-semibold text-text-main">
             {activity.meeting_with || 'N/A'}
           </span>
         </p>
-        <p className="flex justify-between gap-3 text-text-muted">
+        <p className="flex gap-3 text-text-muted">
           <span>Notes</span>
           <span className="max-w-[60%] text-right font-semibold text-text-main">
             {notes || 'No notes available'}
           </span>
         </p>
         {reminder ? (
-          <p className="flex justify-between gap-3 text-text-muted">
+          <p className="flex gap-3 text-text-muted">
             <span>Date and time</span>
             <span className="text-right font-semibold text-text-main">
               {activity.followup_date || 'Not scheduled'}
