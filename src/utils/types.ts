@@ -290,6 +290,77 @@ export interface AttendanceReportQuery {
   search: string
 }
 
+export type LeadStatus = 'Pending' | 'New' | 'Rejected'
+
+export interface LeadConfig {
+  company?: string
+  companyName?: string
+  address?: string
+  leadtype?: string
+  origin?: string
+  valueoflead?: string
+  productname?: string
+  employee?: string
+  buyer_id?: string | number
+  Reason?: string
+}
+
+export interface Lead {
+  id: string
+  first_name?: string | null
+  last_name?: string | null
+  designation?: string | null
+  designation_id?: string | null
+  contact_no?: string | null
+  employee_id?: string | null
+  status?: string | null
+  config?: LeadConfig | null
+}
+
+export interface LeadListQuery {
+  status: LeadStatus
+  page: number
+  limit: number
+  search: string
+}
+
+export interface LeadFormValues {
+  firstName: string
+  lastName: string
+  phone: string
+  company: string
+  designationId: string
+  address: string
+  employeeId: string
+  leadType: string
+  origin: string
+  value: string
+  productName: string
+}
+
+export interface LeadProduct {
+  id?: string
+  product_name?: string
+  status?: string
+}
+
+export type LeadListResponse = ApiResponse<{
+  leads?: {
+    lead?: Lead[]
+    totalRowsValue?: number
+  }
+}>
+
+export type LeadDetailResponse = ApiResponse<{
+  leads?: Lead[] | Lead
+}>
+
+export type ProductListResponse = ApiResponse<{
+  productList?: {
+    products?: LeadProduct[]
+  }
+}>
+
 export interface StartDayPayload {
   is_vehicle: number
   lat: number

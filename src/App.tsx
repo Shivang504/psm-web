@@ -4,6 +4,7 @@ import AttendanceReportPage from './pages/attendance/AttendanceReportPage.tsx'
 import DashboardPage from './pages/dashboard/DashboardPage.tsx'
 import EmployeeFormPage from './pages/employee/EmployeeFormPage.tsx'
 import HomePage from './pages/employee/EmployeeList.tsx'
+import LeadListPage from './pages/leads/LeadListPage.tsx'
 import ProfilePage from './pages/profile/ProfilePage.tsx'
 import LoginPage from './pages/auth/LoginPage.tsx'
 import VerifyOtpPage from './pages/auth/VerifyOtpPage.tsx'
@@ -61,6 +62,18 @@ function App() {
           element={
             <AuthGuard>
               <ProfilePage />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/leads"
+          element={<Navigate to="/leads/pending" replace />}
+        />
+        <Route
+          path="/leads/:status"
+          element={
+            <AuthGuard>
+              <LeadListPage />
             </AuthGuard>
           }
         />

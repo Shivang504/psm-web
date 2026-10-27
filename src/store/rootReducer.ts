@@ -1,5 +1,6 @@
 import { combineReducers } from '@reduxjs/toolkit'
 import attendanceReportReducer from './slices/attendanceReportSlice'
+import leadsReducer from './slices/leadsSlice'
 import authReducer from './slices/authSlice'
 import dashboardReducer from './slices/dashboardSlice'
 import profileReducer from './slices/profileSlice'
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   dashboard: dashboardReducer,
   employeeDetail: employeeDetailReducer,
+  leads: leadsReducer,
   profile: profileReducer,
   users: usersReducer,
 })
