@@ -7,6 +7,10 @@ declare module 'google-map-react' {
     setZoom: (zoom: number) => void
   }
 
+  export interface MapOverlay {
+    setMap: (map: GoogleMapInstance | null) => void
+  }
+
   export interface GoogleMapsApi {
     Polyline: new (options: {
       path: Array<{ lat: number; lng: number }>
@@ -14,9 +18,24 @@ declare module 'google-map-react' {
       strokeColor?: string
       strokeOpacity?: number
       strokeWeight?: number
-    }) => { setMap: (map: GoogleMapInstance | null) => void }
+    }) => MapOverlay
     LatLngBounds: new () => {
       extend: (point: { lat: number; lng: number }) => void
+    }
+    SymbolPath: { CIRCLE: number }
+    Marker: new (options: {
+      map?: GoogleMapInstance | null
+      position: { lat: number; lng: number }
+      icon?: {
+        path: number
+        scale?: number
+        fillColor?: string
+        fillOpacity?: number
+        strokeColor?: string
+        strokeWeight?: number
+      }
+    }) => MapOverlay & {
+      setPosition: (position: { lat: number; lng: number }) => void
     }
   }
 
