@@ -41,20 +41,15 @@ export default function LoginPage() {
   }
 
   return (
-    <AuthLayout variant="login">
-      <div className="mx-auto w-full min-w-0 max-w-[420px]">
-        <span className="inline-flex items-center gap-1.5 rounded-[10px] bg-[rgba(79,70,229,0.12)] px-2.5 py-1 text-xs font-semibold text-[#4F46E5]">
-          Sign in
-        </span>
-        <h1 className="mt-3 text-3xl font-bold tracking-tight text-[#1E1B4B]">
-          Welcome back
-        </h1>
-        <p className="mt-1.5 text-sm text-[#4C4A7A]">
-          Enter your registered mobile number to receive a one-time login code.
-        </p>
-        <div className="mt-6">
-          <LoginForm onSubmit={handleSubmit} />
-        </div>
+    <AuthLayout>
+      <h1 className="text-center text-[28px] font-bold tracking-tight text-[#1E1B4B]">
+        Welcome back
+      </h1>
+      <p className="mt-2 text-center text-sm leading-relaxed text-[#4C4A7A]">
+        Enter your registered mobile number to receive a one-time code.
+      </p>
+      <div className="mt-7">
+        <LoginForm onSubmit={handleSubmit} />
       </div>
     </AuthLayout>
   )

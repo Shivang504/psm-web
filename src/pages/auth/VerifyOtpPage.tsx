@@ -107,14 +107,12 @@ export default function VerifyOtpPage() {
   }
 
   return (
-    <AuthLayout variant="otp">
-      <div className="mx-auto w-full min-w-0 max-w-[420px]">
-        <VerifyOtpForm
-          mobile={mobile}
-          onSubmit={handleSubmit}
-          onResend={handleResend}
-        />
-      </div>
+    <AuthLayout>
+      <VerifyOtpForm
+        mobile={mobile}
+        onSubmit={handleSubmit}
+        onResend={handleResend}
+      />
     </AuthLayout>
   )
 }

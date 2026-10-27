@@ -49,6 +49,71 @@ const ACCEPTED_IMAGE_TYPES = new Set([
   'image/webp',
 ])
 
+type PlaceEntry = { name?: string; description?: string }
+
+type ResolvedPlace = {
+  address: string
+  locality: string
+  pincode: string
+}
+
+function readPincode(
+  postcode: string | undefined,
+  entries: PlaceEntry[],
+): string {
+  const direct = (postcode || '').replace(/\D/g, '')
+  if (direct.length >= 4) return direct.slice(0, 6)
+
+  for (const entry of entries) {
+    const description = (entry.description || '').toLowerCase()
+    const digits = (entry.name || '').replace(/\D/g, '')
+    const looksLikePostcode =
+      description.includes('postcode') ||
+      description.includes('postal') ||
+      /^\d{6}$/.test(digits)
+    if (looksLikePostcode && digits.length >= 4) return digits.slice(0, 6)
+  }
+
+  return ''
+}
+
+async function resolvePlace(lat: number, lng: number): Promise<ResolvedPlace> {
+  const response = await fetch(
+    `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`,
+  )
+  if (!response.ok) {
+    throw new Error('Unable to read the address for this location')
+  }
+
+  const place = (await response.json()) as {
+    locality?: string
+    city?: string
+    principalSubdivision?: string
+    postcode?: string
+    localityInfo?: {
+      informative?: PlaceEntry[]
+      administrative?: PlaceEntry[]
+    }
+  }
+
+  const entries = [
+    ...(place.localityInfo?.informative ?? []),
+    ...(place.localityInfo?.administrative ?? []),
+  ]
+  const locality =
+    place.locality || place.city || place.principalSubdivision || ''
+  const street = entries[0]?.name || ''
+  const address = [street, locality, place.city, place.principalSubdivision]
+    .filter((part, index, parts) => part && parts.indexOf(part) === index)
+    .join(', ')
+
+  return {
+    address,
+    locality,
+    pincode: readPincode(place.postcode, entries),
+  }
+}
+
 async function toUploadImage(file: File, fallbackName: string): Promise<File> {
   if (ACCEPTED_IMAGE_TYPES.has(file.type)) {
     return file
@@ -92,11 +157,11 @@ export function StartDayModal({
   const [currentTime, setCurrentTime] = useState(() => new Date())
   const [vehicleType, setVehicleType] = useState<TravelMode>('1')
   const [meterNo, setMeterNo] = useState('')
-  const [address, setAddress] = useState('Head Office / Field Area')
-  const [locality, setLocality] = useState('Main Office District')
-  const [pincode, setPincode] = useState('395007')
-  const [latitude, setLatitude] = useState<number>(21.1702)
-  const [longitude, setLongitude] = useState<number>(72.8311)
+  const [address, setAddress] = useState('')
+  const [locality, setLocality] = useState('')
+  const [pincode, setPincode] = useState('')
+  const [latitude, setLatitude] = useState<number | null>(null)
+  const [longitude, setLongitude] = useState<number | null>(null)
   const [gpsDetecting, setGpsDetecting] = useState(false)
   const [gpsDetected, setGpsDetected] = useState(false)
 
@@ -107,35 +172,57 @@ export function StartDayModal({
 
   const selfieInputRef = useRef<HTMLInputElement>(null)
   const meterInputRef = useRef<HTMLInputElement>(null)
+  const locationLookupRef = useRef(0)
 
   const handleDetectLocation = useCallback((showNotification = true) => {
     if (!navigator.geolocation) {
       if (showNotification) {
-        toast.error('Geolocation is not supported by your browser')
+        toast.error('Location is not available on this device')
       }
       return
     }
 
+    const lookupId = locationLookupRef.current + 1
+    locationLookupRef.current = lookupId
     setGpsDetecting(true)
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        setLatitude(Number(pos.coords.latitude.toFixed(6)))
-        setLongitude(Number(pos.coords.longitude.toFixed(6)))
+        if (lookupId !== locationLookupRef.current) return
+
+        const lat = Number(pos.coords.latitude.toFixed(6))
+        const lng = Number(pos.coords.longitude.toFixed(6))
+        const coordinateLabel = `${lat}, ${lng}`
+        setLatitude(lat)
+        setLongitude(lng)
+        setAddress((current) => current || coordinateLabel)
+        setLocality((current) => current || coordinateLabel)
         setGpsDetected(true)
         setGpsDetecting(false)
         if (showNotification) {
-          toast.success('Location detected successfully!')
+          toast.success('Location detected')
         }
+
+        void resolvePlace(lat, lng)
+          .then((place) => {
+            if (lookupId !== locationLookupRef.current) return
+            setAddress(place.address || coordinateLabel)
+            setLocality(place.locality || place.address || coordinateLabel)
+            if (place.pincode) setPincode(place.pincode)
+          })
+          .catch(() => {
+            if (lookupId !== locationLookupRef.current) return
+            setAddress((current) => current || coordinateLabel)
+            setLocality((current) => current || coordinateLabel)
+          })
       },
       (err) => {
+        if (lookupId !== locationLookupRef.current) return
         setGpsDetecting(false)
         if (showNotification) {
-          toast.error(
-            err.message || 'Unable to retrieve location. Using default.',
-          )
+          toast.error(err.message || 'Allow location access to continue')
         }
       },
-      { timeout: 10000, enableHighAccuracy: true },
+      { timeout: 15000, enableHighAccuracy: true },
     )
   }, [])
 
@@ -145,6 +232,12 @@ export function StartDayModal({
     const timer = setInterval(() => setCurrentTime(new Date()), 1000)
     return () => clearInterval(timer)
   }, [open])
+
+  useEffect(() => {
+    if (!open) return
+    const timeoutId = window.setTimeout(() => handleDetectLocation(true), 0)
+    return () => window.clearTimeout(timeoutId)
+  }, [open, handleDetectLocation])
 
   if (!open) return null
 
@@ -214,10 +307,19 @@ export function StartDayModal({
       return
     }
 
-    if (!address.trim()) {
-      toast.error('Address is required.')
+    if (latitude == null || longitude == null) {
+      toast.error(
+        gpsDetecting
+          ? 'Current location is still loading. Wait for GPS, then try again.'
+          : 'Allow location access, then try again.',
+      )
       return
     }
+
+    const coordinateLabel = `${latitude}, ${longitude}`
+    const resolvedAddress = address.trim() || coordinateLabel
+    const resolvedLocality = locality.trim() || resolvedAddress
+    const resolvedPincode = pincode.trim() || '0'
 
     const pad = (n: number) => String(n).padStart(2, '0')
     const now = new Date()
@@ -229,9 +331,9 @@ export function StartDayModal({
     formData.append('is_vehicle', vehicleType)
     formData.append('lat', String(latitude))
     formData.append('long', String(longitude))
-    formData.append('address', address.trim())
-    formData.append('locality', locality.trim() || address.trim())
-    formData.append('pincode', String(parseInt(pincode, 10) || 395007))
+    formData.append('address', resolvedAddress)
+    formData.append('locality', resolvedLocality)
+    formData.append('pincode', resolvedPincode)
     formData.append('is_flag', isEndDay ? '0' : '1')
     formData.append('start_time', formattedStartTime)
 
@@ -429,7 +531,6 @@ export function StartDayModal({
             )}
           </div>
 
-          {/* GPS Location Details */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <label className="text-[13px] font-semibold text-[#1E1B4B]">
@@ -446,61 +547,44 @@ export function StartDayModal({
                 ) : (
                   <Navigation className="size-3.5" />
                 )}
-                {gpsDetected ? 'Refresh GPS' : 'Detect GPS'}
+                {gpsDetected ? 'Refresh' : 'Detect again'}
               </button>
             </div>
 
-            <div className="flex items-center gap-2 rounded-[12px] bg-white/70 px-3 py-2 text-[12px] border border-[#4F46E5]/15 text-[#312E81]">
-              <MapPin className="size-4 shrink-0 text-[#4F46E5]" />
-              <span className="truncate">
-                Lat: {latitude}, Long: {longitude}
-              </span>
-              {gpsDetected && (
-                <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-[#DCFCE7] px-2 py-0.5 text-[10px] font-semibold text-[#166534]">
-                  <CheckCircle2 className="size-3" /> GPS Locked
+            <div className="space-y-2 rounded-[12px] border border-[#4F46E5]/15 bg-white/70 px-3 py-3 text-[12px] text-[#312E81]">
+              <div className="flex items-center gap-2">
+                <MapPin className="size-4 shrink-0 text-[#4F46E5]" />
+                <span className="truncate">
+                  {latitude != null && longitude != null
+                    ? `Lat: ${latitude}, Long: ${longitude}`
+                    : 'Reading latitude and longitude…'}
                 </span>
-              )}
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label className="mb-1 block text-[12px] font-medium text-[#4C4A7A]">
-                  Address / Site
-                </label>
-                <input
-                  type="text"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                  placeholder="e.g. Ring Road Office"
-                  className="h-[40px] w-full rounded-[12px] border border-[rgba(79,70,229,0.2)] bg-white/80 px-3 text-[13px] text-[#1E1B4B] outline-none focus:border-[#4F46E5]"
-                />
+                {gpsDetected && (
+                  <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-[#DCFCE7] px-2 py-0.5 text-[10px] font-semibold text-[#166534]">
+                    <CheckCircle2 className="size-3" /> GPS
+                  </span>
+                )}
               </div>
-
-              <div>
-                <label className="mb-1 block text-[12px] font-medium text-[#4C4A7A]">
-                  Locality / City
-                </label>
-                <input
-                  type="text"
-                  value={locality}
-                  onChange={(e) => setLocality(e.target.value)}
-                  placeholder="e.g. Central City"
-                  className="h-[40px] w-full rounded-[12px] border border-[rgba(79,70,229,0.2)] bg-white/80 px-3 text-[13px] text-[#1E1B4B] outline-none focus:border-[#4F46E5]"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="mb-1 block text-[12px] font-medium text-[#4C4A7A]">
-                Pincode
-              </label>
-              <input
-                type="text"
-                value={pincode}
-                onChange={(e) => setPincode(e.target.value)}
-                placeholder="e.g. 395007"
-                className="h-[40px] w-full rounded-[12px] border border-[rgba(79,70,229,0.2)] bg-white/80 px-3 text-[13px] text-[#1E1B4B] outline-none focus:border-[#4F46E5]"
-              />
+              <p>
+                <span className="font-semibold text-[#4C4A7A]">
+                  Address / Site:{' '}
+                </span>
+                {gpsDetecting
+                  ? 'Finding address…'
+                  : address || 'Not available yet'}
+              </p>
+              <p>
+                <span className="font-semibold text-[#4C4A7A]">Locality: </span>
+                {gpsDetecting
+                  ? 'Finding locality…'
+                  : locality || 'Not available yet'}
+              </p>
+              <p>
+                <span className="font-semibold text-[#4C4A7A]">Pincode: </span>
+                {gpsDetecting
+                  ? 'Finding pincode…'
+                  : pincode || 'Not available yet'}
+              </p>
             </div>
           </div>
 

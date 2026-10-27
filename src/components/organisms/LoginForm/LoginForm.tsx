@@ -64,12 +64,7 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
           isMobileNumber
         />
 
-        <Button
-          type="submit"
-          loading={loading}
-          size="default"
-          className="mt-2 w-full h-[46px] rounded-[16px] bg-[#4F46E5] text-white font-semibold shadow-md shadow-[#4F46E5]/25 hover:bg-[#4338CA]"
-        >
+        <Button type="submit" loading={loading} size="default" className="mt-1">
           {loading ? 'Sending OTP...' : 'Send OTP'}
           {loading ? null : <ArrowRight className="size-4" />}
         </Button>

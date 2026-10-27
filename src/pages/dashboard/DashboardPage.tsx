@@ -217,21 +217,27 @@ export default function DashboardPage() {
                   <button
                     type="button"
                     onClick={() => setEndDayModalOpen(true)}
-                    className="inline-flex h-[44px] cursor-pointer items-center justify-center gap-2 rounded-[14px] bg-[#1E1B4B] px-5 text-[14px] font-semibold text-white shadow-md shadow-[#1E1B4B]/20 transition hover:bg-[#312E81] active:scale-[0.99]"
+                    className="inline-flex h-[44px] cursor-pointer items-center justify-center gap-2 rounded-[14px] bg-[#1E1B4B] px-5 text-[14px] font-semibold text-white shadow-md shadow-[#1E1B4B]/20 transition hover:bg-[#312E81] active:scale-[0.99] md:hidden"
                   >
                     <Moon className="size-4" />
                     <span>End Day</span>
                   </button>
                 </>
               ) : (
-                <button
-                  type="button"
-                  onClick={() => setStartDayModalOpen(true)}
-                  className="inline-flex h-[44px] cursor-pointer items-center justify-center gap-2 rounded-[14px] bg-[#4F46E5] px-5 text-[14px] font-semibold text-white shadow-md shadow-[#4F46E5]/25 transition hover:bg-[#4338CA] active:scale-[0.99]"
-                >
-                  <Sun className="size-4" />
-                  <span>Start Day Now</span>
-                </button>
+                <>
+                  <div className="hidden items-center gap-2.5 rounded-[16px] border border-[#4F46E5]/15 bg-white/70 px-4 py-2.5 text-xs font-semibold text-[#4C4A7A] md:flex">
+                    <Sun className="size-3.5 text-[#4F46E5]" />
+                    <span>Day not started</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setStartDayModalOpen(true)}
+                    className="inline-flex h-[44px] cursor-pointer items-center justify-center gap-2 rounded-[14px] bg-[#4F46E5] px-5 text-[14px] font-semibold text-white shadow-md shadow-[#4F46E5]/25 transition hover:bg-[#4338CA] active:scale-[0.99] md:hidden"
+                  >
+                    <Sun className="size-4" />
+                    <span>Start Day Now</span>
+                  </button>
+                </>
               )}
             </div>
           </div>

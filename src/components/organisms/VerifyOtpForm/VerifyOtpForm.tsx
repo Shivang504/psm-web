@@ -112,13 +112,10 @@ export function VerifyOtpForm({
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleFormSubmit} noValidate>
-        <span className="inline-flex items-center gap-1.5 rounded-[10px] bg-[rgba(79,70,229,0.12)] px-2.5 py-1 text-xs font-semibold text-[#4F46E5]">
-          Verification
-        </span>
-        <h1 className="mt-3 text-3xl font-bold tracking-tight text-[#1E1B4B]">
+        <h1 className="text-center text-[28px] font-bold tracking-tight text-[#1E1B4B]">
           Check your phone
         </h1>
-        <p className="mt-1.5 text-sm text-[#4C4A7A]">
+        <p className="mt-2 text-center text-sm leading-relaxed text-[#4C4A7A]">
           Enter the 6-digit code sent to{' '}
           <span className="font-semibold text-[#1E1B4B]">
             {mobile ? `+91 ${mobile}` : 'your mobile number'}
@@ -134,7 +131,7 @@ export function VerifyOtpForm({
           />
         </div>
 
-        <p className="mt-4 text-xs sm:text-sm text-[#4C4A7A]">
+        <p className="mt-4 text-center text-xs text-[#4C4A7A] sm:text-sm">
           Didn’t receive the code?{' '}
           <button
             type="button"
@@ -153,7 +150,7 @@ export function VerifyOtpForm({
           type="submit"
           loading={loading}
           disabled={resending}
-          className="mt-6 w-full h-[46px] rounded-[16px] bg-[#4F46E5] text-white font-semibold shadow-md shadow-[#4F46E5]/25 hover:bg-[#4338CA]"
+          className="mt-6"
         >
           {loading ? 'Verifying...' : 'Verify and continue'}
           {loading ? null : <ArrowRight className="size-4" />}
