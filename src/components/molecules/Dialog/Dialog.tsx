@@ -10,6 +10,7 @@ type DialogProps = {
   handleSubmit?: () => void
   label?: string
   closeOnOutsideClick?: boolean
+  panelClassName?: string
 }
 
 export function Dialog({
@@ -21,20 +22,24 @@ export function Dialog({
   handleSubmit,
   label = 'Confirm',
   closeOnOutsideClick = true,
+  panelClassName = 'max-w-md',
 }: DialogProps) {
   useEffect(() => {
     if (!open) return
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && closeOnOutsideClick) onClose()
+      if (event.key === 'Escape' && closeOnOutsideClick) {
+        event.stopPropagation()
+        onClose()
+      }
     }
 
-    document.addEventListener('keydown', handleKeyDown)
+    document.addEventListener('keydown', handleKeyDown, true)
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
 
     return () => {
-      document.removeEventListener('keydown', handleKeyDown)
+      document.removeEventListener('keydown', handleKeyDown, true)
       document.body.style.overflow = previousOverflow
     }
   }, [open, onClose, closeOnOutsideClick])
@@ -42,7 +47,7 @@ export function Dialog({
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
       <button
         type="button"
         aria-label="Close dialog"
@@ -56,7 +61,7 @@ export function Dialog({
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? 'dialog-title' : undefined}
-        className="relative z-10 w-full max-w-md rounded-[22px] border border-white/90 bg-white/90 p-6 backdrop-blur-2xl shadow-[0_24px_60px_-15px_rgba(30,27,75,0.25)]"
+        className={`relative z-10 w-full rounded-[22px] border border-white/90 bg-white/90 p-6 backdrop-blur-2xl shadow-[0_24px_60px_-15px_rgba(30,27,75,0.25)] ${panelClassName}`}
       >
         {closeOnOutsideClick ? (
           <button
