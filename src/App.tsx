@@ -4,6 +4,7 @@ import AttendanceReportPage from './pages/attendance/AttendanceReportPage.tsx'
 import DashboardPage from './pages/dashboard/DashboardPage.tsx'
 import EmployeeFormPage from './pages/employee/EmployeeFormPage.tsx'
 import HomePage from './pages/employee/EmployeeList.tsx'
+import ProfilePage from './pages/profile/ProfilePage.tsx'
 import LoginPage from './pages/auth/LoginPage.tsx'
 import VerifyOtpPage from './pages/auth/VerifyOtpPage.tsx'
 import { useAppSelector } from './store/hooks'
@@ -48,6 +49,18 @@ function App() {
           element={
             <AuthGuard>
               <AttendanceReportPage />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/profile"
+          element={<Navigate to="/profile/personal-information" replace />}
+        />
+        <Route
+          path="/profile/:section"
+          element={
+            <AuthGuard>
+              <ProfilePage />
             </AuthGuard>
           }
         />

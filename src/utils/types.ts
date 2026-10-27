@@ -41,6 +41,34 @@ export interface LoginData {
 
 export type LoginResponse = ApiResponse<LoginData>
 
+export interface UserCompanyConfig {
+  zipCode?: string
+  GSTN?: string
+  landlineNumber?: string
+}
+
+export interface UserProfileConfig {
+  birthDate?: string
+  flag?: string | number | boolean | null
+  regionName?: string
+  companyName?: string
+  GSTN?: string
+  landlineNumber?: string
+  address?: string
+  state?: string
+  city?: string
+  country?: string
+  pincode?: string
+  BankName?: string
+  BankIFSC?: string
+  BankAccountNumber?: string
+  hierarchy?: {
+    parent?: string[]
+    child?: string[]
+    vendor?: unknown[]
+  }
+}
+
 export interface UserProfile {
   id: string
   first_name?: string
@@ -54,6 +82,35 @@ export interface UserProfile {
   email?: string
   company_id?: string
   company_name?: string
+  company_country?: string
+  company_address?: string
+  company_state?: string
+  company_city?: string
+  company_pincode?: string
+  company_config?: UserCompanyConfig
+  config?: UserProfileConfig
+}
+
+export type ProfileSection =
+  'personal-information' | 'company-detail' | 'bank-detail'
+
+export interface ProfileFormValues {
+  firstName: string
+  lastName: string
+  phone: string
+  email: string
+  birthDate: string
+  companyName: string
+  state: string
+  city: string
+  gstin: string
+  landlineNumber: string
+  country: string
+  address: string
+  pincode: string
+  bankName: string
+  bankIfsc: string
+  bankAccountNumber: string
 }
 
 export type ProfileResponse = ApiResponse<{

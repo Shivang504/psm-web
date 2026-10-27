@@ -7,6 +7,7 @@ export interface ProfileState {
   profile: UserProfile | null
   roleId: string
   loading: boolean
+  saving: boolean
   error: string
 }
 
@@ -14,6 +15,7 @@ const initialState: ProfileState = {
   profile: null,
   roleId: getStoredRoleId() ?? '',
   loading: false,
+  saving: false,
   error: '',
 }
 
@@ -38,17 +40,25 @@ const profileSlice = createSlice({
       state.loading = false
       state.error = action.payload
     },
+    setProfileSaving: (state, action: PayloadAction<boolean>) => {
+      state.saving = action.payload
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(logout, () => ({
       profile: null,
       roleId: '',
       loading: false,
+      saving: false,
       error: '',
     }))
   },
 })
 
-export const { fetchProfile, fetchProfileSuccess, fetchProfileFailure } =
-  profileSlice.actions
+export const {
+  fetchProfile,
+  fetchProfileSuccess,
+  fetchProfileFailure,
+  setProfileSaving,
+} = profileSlice.actions
 export default profileSlice.reducer

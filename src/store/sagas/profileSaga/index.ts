@@ -4,4 +4,5 @@ import { genericSaga } from '@/store/sagas/genericSaga/genericSaga'
 
 export function* profileSaga() {
   yield takeLatest(sagaActions.GET_PROFILE, genericSaga)
+  yield takeLatest(sagaActions.UPDATE_PROFILE, genericSaga)
 }

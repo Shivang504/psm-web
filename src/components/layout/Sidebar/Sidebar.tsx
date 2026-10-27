@@ -1,11 +1,10 @@
 import {
-  BarChart3,
   CalendarCheck,
   ChevronLeft,
   ChevronRight,
   LayoutDashboard,
   LogOut,
-  Settings,
+  User,
   Users,
   type LucideIcon,
 } from 'lucide-react'
@@ -21,8 +20,7 @@ const DEFAULT_NAV_ITEMS: NavItemConfig[] = [
   { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard },
   { label: 'Employee list', to: '/home', icon: Users },
   { label: 'Attendance report', to: '/attendance', icon: CalendarCheck },
-  { label: 'Reports', to: '/reports', icon: BarChart3 },
-  { label: 'Settings', to: '/settings', icon: Settings },
+  { label: 'Profile', to: '/profile', icon: User },
 ]
 
 export interface SidebarProps {
