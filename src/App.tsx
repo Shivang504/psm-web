@@ -6,6 +6,8 @@ import EmployeeFormPage from './pages/employee/EmployeeFormPage.tsx'
 import HomePage from './pages/employee/EmployeeList.tsx'
 import LeadListPage from './pages/leads/LeadListPage.tsx'
 import OrderListPage from './pages/orders/OrderListPage.tsx'
+import VendorFormPage from './pages/vendors/VendorFormPage.tsx'
+import VendorListPage from './pages/vendors/VendorListPage.tsx'
 import ProfilePage from './pages/profile/ProfilePage.tsx'
 import LoginPage from './pages/auth/LoginPage.tsx'
 import VerifyOtpPage from './pages/auth/VerifyOtpPage.tsx'
@@ -87,6 +89,30 @@ function App() {
           element={
             <AuthGuard>
               <OrderListPage />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/vendors"
+          element={
+            <AuthGuard>
+              <VendorListPage />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/vendors/new"
+          element={
+            <AuthGuard>
+              <VendorFormPage />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/vendors/:id/edit"
+          element={
+            <AuthGuard>
+              <VendorFormPage />
             </AuthGuard>
           }
         />

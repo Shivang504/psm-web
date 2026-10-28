@@ -6,6 +6,7 @@ import { leadsSaga } from './leadsSaga'
 import { ordersSaga } from './ordersSaga'
 import { profileSaga } from './profileSaga'
 import { usersSaga } from './usersSaga'
+import { vendorsSaga } from './vendorsSaga'
 
 export function* rootSaga() {
   yield all([
@@ -16,5 +17,6 @@ export function* rootSaga() {
     fork(ordersSaga),
     fork(profileSaga),
     fork(usersSaga),
+    fork(vendorsSaga),
   ])
 }

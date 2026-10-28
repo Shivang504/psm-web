@@ -184,6 +184,82 @@ export interface EmployeeFormValues {
   email: string
 }
 
+export interface VendorConfig extends UserConfig {
+  company?: string
+  birthDate?: string
+  GSTN?: string
+  landlineNumber?: string
+  address?: string
+  city?: string
+  country?: string
+  pincode?: string
+  pancardNo?: string
+  aadharNo?: string
+  fssaiLicenseNo?: string
+  BankName?: string
+  BankAccountNumber?: string
+  BankIFSC?: string
+}
+
+export interface VendorRecord {
+  id: string
+  first_name?: string | null
+  last_name?: string | null
+  full_name?: string | null
+  email?: string | null
+  designation?: string | null
+  designation_id?: string | null
+  contact_no?: string | null
+  status?: string | null
+  role?: string | null
+  created_by?: string | null
+  config?: VendorConfig | null
+}
+
+export interface VendorListQuery {
+  role: string
+  designation: string
+  page: number
+  limit: number
+  search: string
+}
+
+export interface VendorFormValues {
+  firstName: string
+  lastName: string
+  designation: string
+  phone: string
+  email: string
+  birthDate: string
+  regionName: string
+  territories: string
+  company: string
+  address: string
+  gstn: string
+  landline: string
+  state: string
+  city: string
+  country: string
+  pincode: string
+  pan: string
+  aadhar: string
+  fssai: string
+  bankName: string
+  bankAccount: string
+  bankIfsc: string
+}
+
+export type VendorListResponse = ApiResponse<{
+  users?: {
+    user?: VendorRecord[]
+    totalRowsValue?: number
+  }
+}>
+
+export type VendorDetailResponse = ApiResponse<{
+  user?: VendorRecord | VendorRecord[]
+}>
+
 export interface AppRole {
   id: string
   role: string

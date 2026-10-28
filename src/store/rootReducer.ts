@@ -7,6 +7,7 @@ import dashboardReducer from './slices/dashboardSlice'
 import profileReducer from './slices/profileSlice'
 import employeeDetailReducer from './slices/employeeDetailSlice'
 import usersReducer from './slices/usersSlice'
+import vendorsReducer from './slices/vendorsSlice'
 
 const rootReducer = combineReducers({
   attendanceReport: attendanceReportReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   orders: ordersReducer,
   profile: profileReducer,
   users: usersReducer,
+  vendors: vendorsReducer,
 })
 
 export type RootState = ReturnType<typeof rootReducer>
