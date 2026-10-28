@@ -192,3 +192,88 @@ export function downloadAttendanceReport(
   link.click()
   URL.revokeObjectURL(url)
 }
+
+export function parseDate(value: string) {
+  const [year, month, day] = value.split('-').map(Number)
+  return new Date(year || 1970, (month || 1) - 1, day || 1)
+}
+
+export function formatIso(date: Date) {
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${date.getFullYear()}-${month}-${day}`
+}
+
+export function formatDisplay(value: string) {
+  const [year, month, day] = value.split('-')
+  if (!year || !month || !day) return value
+  return `${day}-${month}-${year}`
+}
+
+export function addDays(date: Date, days: number) {
+  const next = new Date(date)
+  next.setDate(next.getDate() + days)
+  return next
+}
+
+export function startOfToday() {
+  const now = new Date()
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate())
+}
+
+export function presetRange(id: PresetId) {
+  const today = startOfToday()
+  if (id === 'today') {
+    const iso = formatIso(today)
+    return { start: iso, end: iso }
+  }
+  if (id === 'yesterday') {
+    const iso = formatIso(addDays(today, -1))
+    return { start: iso, end: iso }
+  }
+  if (id === 'last7') {
+    return { start: formatIso(addDays(today, -6)), end: formatIso(today) }
+  }
+  if (id === 'last30') {
+    return { start: formatIso(addDays(today, -29)), end: formatIso(today) }
+  }
+  if (id === 'thisMonth') {
+    const start = new Date(today.getFullYear(), today.getMonth(), 1)
+    const end = new Date(today.getFullYear(), today.getMonth() + 1, 0)
+    return { start: formatIso(start), end: formatIso(end) }
+  }
+  if (id === 'lastMonth') {
+    const start = new Date(today.getFullYear(), today.getMonth() - 1, 1)
+    const end = new Date(today.getFullYear(), today.getMonth(), 0)
+    return { start: formatIso(start), end: formatIso(end) }
+  }
+  return null
+}
+type PresetId =
+  | 'today'
+  | 'yesterday'
+  | 'last7'
+  | 'last30'
+  | 'thisMonth'
+  | 'lastMonth'
+  | 'custom'
+
+export function matchPreset(start: string, end: string): PresetId {
+  const ids: PresetId[] = [
+    'today',
+    'yesterday',
+    'last7',
+    'last30',
+    'thisMonth',
+    'lastMonth',
+  ]
+  for (const id of ids) {
+    const range = presetRange(id)
+    if (range && range.start === start && range.end === end) return id
+  }
+  return 'custom'
+}
+
+export function monthLabel(date: Date) {
+  return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+}

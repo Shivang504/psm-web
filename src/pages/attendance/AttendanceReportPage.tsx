@@ -6,6 +6,7 @@ import { StatusPill } from '@/components/atoms/StatusPill'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Toolbar } from '@/components/layout/Toolbar'
 import { DataTable, type ColumnType } from '@/components/molecules/DataTable'
+import { DateRangePicker } from '@/components/molecules/DateRangePicker'
 import { AdminLayout } from '@/components/organisms/AdminLayout'
 import { sagaActions } from '@/store/actions'
 import { store, type AppDispatch } from '@/store'
@@ -55,28 +56,6 @@ function dispatchAttendanceReport(
       },
     },
   })
-}
-
-function DateField({
-  label,
-  value,
-  onChange,
-}: {
-  label: string
-  value: string
-  onChange: (value: string) => void
-}) {
-  return (
-    <label className="flex h-[44px] items-center gap-2 rounded-[14px] border border-white/85 bg-white/62 px-3 text-[13px] text-[#4C4A7A] shadow-[0_2px_8px_rgba(79,70,229,0.04)] backdrop-blur-md">
-      <span className="shrink-0 text-[12px] font-semibold">{label}</span>
-      <input
-        type="date"
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        className="bg-transparent text-[13px] font-medium text-[#1E1B4B] outline-none"
-      />
-    </label>
-  )
 }
 
 export default function AttendanceReportPage() {
@@ -310,15 +289,12 @@ export default function AttendanceReportPage() {
           searchPlaceholder="Search name or mobile"
           filters={
             <>
-              <DateField
-                label="From"
-                value={query.startDate}
-                onChange={(startDate) => loadReport({ startDate, page: 1 })}
-              />
-              <DateField
-                label="To"
-                value={query.endDate}
-                onChange={(endDate) => loadReport({ endDate, page: 1 })}
+              <DateRangePicker
+                startDate={query.startDate}
+                endDate={query.endDate}
+                onChange={(startDate, endDate) =>
+                  loadReport({ startDate, endDate, page: 1 })
+                }
               />
             </>
           }

@@ -1,4 +1,5 @@
 export * from './DataTable'
+export * from './DateRangePicker'
 export * from './Dialog'
 export * from './Drawer'
 export * from './FilterDropdown'
