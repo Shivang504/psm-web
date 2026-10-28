@@ -342,7 +342,72 @@ export interface LeadProduct {
   id?: string
   product_name?: string
   status?: string
+  price?: string | number
 }
+
+export type OrderTab = 'pending' | 'confirm' | 'reject' | 'cancel' | 'all'
+
+export interface OrderProduct {
+  id?: string
+  product_id?: string
+  product_name?: string
+  quantity?: number | string
+  price?: number | string
+  total_price?: number | string
+  config?: {
+    selected_package?: string
+  }
+}
+
+export interface OrderConfig {
+  order_id?: string
+  buyer_company_name?: string
+  company_name?: string
+  gross_total?: number | string
+  locality?: string
+  order_status?: string
+  start_time?: string
+  reason?: string
+  Reason?: string
+  products?: OrderProduct[]
+}
+
+export interface OrderRecord {
+  id?: string
+  date?: string
+  employee?: string
+  event_type?: string
+  reason?: string
+  config?: OrderConfig
+}
+
+export interface OrderListQuery {
+  status: OrderTab
+  startDate: string
+  endDate: string
+  page: number
+  limit: number
+  search: string
+}
+
+export type OrderListResponse = ApiResponse<{
+  UserActivities?: {
+    order?: OrderRecord[]
+    totalRowsValue?: number
+  }
+}>
+
+export type OrderDetailResponse = ApiResponse<{
+  UserActivities?: OrderRecord | OrderRecord[]
+}>
+
+export type OrderReportResponse = ApiResponse<{
+  UserActivities?:
+    | OrderRecord[]
+    | {
+        order?: OrderRecord[]
+      }
+}>
 
 export type LeadListResponse = ApiResponse<{
   leads?: {

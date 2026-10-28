@@ -5,6 +5,7 @@ import {
   Contact,
   LayoutDashboard,
   LogOut,
+  ShoppingBag,
   User,
   Users,
   type LucideIcon,
@@ -20,6 +21,7 @@ export interface NavItemConfig {
 const DEFAULT_NAV_ITEMS: NavItemConfig[] = [
   { label: 'Dashboard', to: '/dashboard', icon: LayoutDashboard },
   { label: 'Leads', to: '/leads', icon: Contact },
+  { label: 'Orders', to: '/orders', icon: ShoppingBag },
   { label: 'Employee list', to: '/home', icon: Users },
   { label: 'Attendance report', to: '/attendance', icon: CalendarCheck },
   { label: 'Profile', to: '/profile', icon: User },

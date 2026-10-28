@@ -5,6 +5,7 @@ import DashboardPage from './pages/dashboard/DashboardPage.tsx'
 import EmployeeFormPage from './pages/employee/EmployeeFormPage.tsx'
 import HomePage from './pages/employee/EmployeeList.tsx'
 import LeadListPage from './pages/leads/LeadListPage.tsx'
+import OrderListPage from './pages/orders/OrderListPage.tsx'
 import ProfilePage from './pages/profile/ProfilePage.tsx'
 import LoginPage from './pages/auth/LoginPage.tsx'
 import VerifyOtpPage from './pages/auth/VerifyOtpPage.tsx'
@@ -74,6 +75,18 @@ function App() {
           element={
             <AuthGuard>
               <LeadListPage />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/orders"
+          element={<Navigate to="/orders/pending" replace />}
+        />
+        <Route
+          path="/orders/:status"
+          element={
+            <AuthGuard>
+              <OrderListPage />
             </AuthGuard>
           }
         />
