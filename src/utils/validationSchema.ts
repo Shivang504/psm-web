@@ -67,6 +67,29 @@ const bankAccountSchema = optionalPattern(
   'Account number must be 9 to 18 digits',
 )
 const bankIfscSchema = optionalPattern(regex.ifsc, 'Enter a valid IFSC')
+const lettersAndNumbers = /^[a-zA-Z0-9][a-zA-Z0-9 ]*$/
+const moneyPattern = /^\d{1,8}(\.\d{1,4})?$/
+
+function namedText(label: string) {
+  return yup
+    .string()
+    .trim()
+    .required(`${label} is required`)
+    .matches(lettersAndNumbers, 'Please use only numbers and letters.')
+}
+
+function moneyField(label: string, allowZero = false) {
+  return yup
+    .string()
+    .trim()
+    .required(`${label} is required`)
+    .matches(moneyPattern, 'The field should have digits only')
+    .test(
+      'not-zero',
+      `${label} cannot be zero`,
+      (value) => allowZero || !value || Number(value) !== 0,
+    )
+}
 
 export const validationSchema = {
   mobile: mobileSchema,
@@ -94,4 +117,22 @@ export const validationSchema = {
   bankName: optionalFieldSchema(),
   bankAccount: bankAccountSchema,
   bankIfsc: bankIfscSchema,
+  categoryName: namedText('Category name'),
+  productName: namedText('Product name'),
+  hsnCode: yup
+    .string()
+    .trim()
+    .required('Product HSN code is required')
+    .matches(/^\d{1,8}$/, 'HSN code should be up to 8 digits'),
+  mrp: moneyField('MRP'),
+  packageName: yup.string().trim().required('Package is required'),
+  vendorPrice: moneyField('Price'),
+  stockQuantity: moneyField('Stock', true),
+  batchCode: optionalFieldSchema(),
+  productPrice: moneyField('Product price'),
+  vendorType: yup.string().trim().required('Vendor type is required'),
+  priceBasedOn: yup
+    .string()
+    .oneOf(['SKN/HSN Code', 'Product'])
+    .required('Choose how the price is based'),
 }

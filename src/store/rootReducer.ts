@@ -7,6 +7,7 @@ import dashboardReducer from './slices/dashboardSlice'
 import profileReducer from './slices/profileSlice'
 import employeeDetailReducer from './slices/employeeDetailSlice'
 import usersReducer from './slices/usersSlice'
+import inventoryReducer from './slices/inventorySlice'
 import vendorsReducer from './slices/vendorsSlice'
 
 const rootReducer = combineReducers({
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   dashboard: dashboardReducer,
   employeeDetail: employeeDetailReducer,
+  inventory: inventoryReducer,
   leads: leadsReducer,
   orders: ordersReducer,
   profile: profileReducer,

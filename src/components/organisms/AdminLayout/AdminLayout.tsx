@@ -101,7 +101,7 @@ export function AdminLayout({
   return (
     <div className="flex h-screen w-full overflow-hidden p-3 sm:p-5 gap-4 sm:gap-5 bg-gradient-to-br from-[#DCD3F7] via-[#FBD8E8] to-[#CFE5FB] text-[#1E1B4B] font-['Plus_Jakarta_Sans',system-ui,sans-serif]">
       {/* Desktop & Tablet Sidebar */}
-      <div className="hidden md:flex shrink-0">
+      <div className="hidden h-full min-h-0 shrink-0 md:flex">
         <Sidebar
           mobile={mobile}
           onSignOut={handleSignOut}

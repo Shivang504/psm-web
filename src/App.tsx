@@ -6,6 +6,11 @@ import EmployeeFormPage from './pages/employee/EmployeeFormPage.tsx'
 import HomePage from './pages/employee/EmployeeList.tsx'
 import LeadListPage from './pages/leads/LeadListPage.tsx'
 import OrderListPage from './pages/orders/OrderListPage.tsx'
+import CategoryListPage from './pages/inventory/CategoryListPage.tsx'
+import PriceListPage from './pages/inventory/PriceListPage.tsx'
+import ProductFormPage from './pages/inventory/ProductFormPage.tsx'
+import ProductListPage from './pages/inventory/ProductListPage.tsx'
+import StockListPage from './pages/inventory/StockListPage.tsx'
 import VendorFormPage from './pages/vendors/VendorFormPage.tsx'
 import VendorListPage from './pages/vendors/VendorListPage.tsx'
 import ProfilePage from './pages/profile/ProfilePage.tsx'
@@ -89,6 +94,66 @@ function App() {
           element={
             <AuthGuard>
               <OrderListPage />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/inventory"
+          element={<Navigate to="/inventory/category" replace />}
+        />
+        <Route
+          path="/inventory/category"
+          element={
+            <AuthGuard>
+              <CategoryListPage />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/inventory/products"
+          element={
+            <AuthGuard>
+              <ProductListPage />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/inventory/products/new"
+          element={
+            <AuthGuard>
+              <ProductFormPage />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/inventory/products/:id/edit"
+          element={
+            <AuthGuard>
+              <ProductFormPage />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/inventory/stock"
+          element={
+            <AuthGuard>
+              <StockListPage />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/inventory/stock/:productId"
+          element={
+            <AuthGuard>
+              <StockListPage />
+            </AuthGuard>
+          }
+        />
+        <Route
+          path="/inventory/price"
+          element={
+            <AuthGuard>
+              <PriceListPage />
             </AuthGuard>
           }
         />

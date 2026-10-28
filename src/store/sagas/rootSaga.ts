@@ -2,6 +2,7 @@ import { all, fork } from 'redux-saga/effects'
 import { attendanceSaga } from './attendanceSaga'
 import { authSaga } from './authSaga'
 import { dashboardSaga } from './dashboardSaga'
+import { inventorySaga } from './inventorySaga'
 import { leadsSaga } from './leadsSaga'
 import { ordersSaga } from './ordersSaga'
 import { profileSaga } from './profileSaga'
@@ -13,6 +14,7 @@ export function* rootSaga() {
     fork(authSaga),
     fork(attendanceSaga),
     fork(dashboardSaga),
+    fork(inventorySaga),
     fork(leadsSaga),
     fork(ordersSaga),
     fork(profileSaga),

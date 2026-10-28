@@ -502,6 +502,143 @@ export type ProductListResponse = ApiResponse<{
   }
 }>
 
+export interface CategoryRecord {
+  id: string
+  category_name: string
+  status?: string | null
+}
+
+export type CategoryListResponse = ApiResponse<{
+  categories?:
+    | CategoryRecord[]
+    | {
+        category?: CategoryRecord[]
+      }
+}>
+
+export interface ProductVendorPackage {
+  packageId?: string
+  package_name?: string
+  qty?: number | string
+}
+
+export interface InventoryProductConfig {
+  package?: string
+  packageId?: string
+  quantityOfPackage?: number | string
+  vendorPrices?: Record<string, string | number>
+  vendorPackages?: Record<string, ProductVendorPackage[]>
+}
+
+export interface InventoryProduct {
+  id: string
+  product_name: string
+  mrp?: string | number
+  category_name?: string
+  product_hsncode?: string
+  quantity?: string | number
+  status?: string | null
+  config?: InventoryProductConfig | null
+}
+
+export type InventoryProductListResponse = ApiResponse<{
+  productList?: {
+    products?: InventoryProduct[]
+  }
+}>
+
+export interface PackageConfig {
+  status?: string
+  quantityOfPackage?: number | string
+}
+
+export interface PackageRecord {
+  id: string
+  package_name: string
+  config?: PackageConfig | null
+}
+
+export type PackageListResponse = ApiResponse<{
+  packages?: {
+    packageData?: PackageRecord[]
+  }
+}>
+
+export interface VendorPriceFormValue {
+  designation: string
+  price: string
+  packages: string[]
+}
+
+export interface ProductFormValues {
+  productName: string
+  hsnCode: string
+  categoryName: string
+  packageName: string
+  mrp: string
+  vendorPrices: VendorPriceFormValue[]
+}
+
+export interface StockRecord {
+  id: string
+  stock_id?: string
+  product_id?: string
+  product_name?: string
+  product_hsncode?: string
+  batch_code?: string
+  category_name?: string
+  quantity?: string | number
+  date?: string
+}
+
+export type StockListResponse = ApiResponse<{
+  stockList?: {
+    stocks?: StockRecord[]
+  }
+}>
+
+export interface StockLineValues {
+  productName: string
+  quantity: string
+  batchCode: string
+}
+
+export interface StockFormValues {
+  lines: StockLineValues[]
+}
+
+export interface PriceConfig {
+  priceList_basedOn?: string
+  vendor_type?: string
+  company_name?: string
+  vendor_id?: string
+  HSN_CODE?: string | null
+  product_name?: string | null
+}
+
+export interface PriceRecord {
+  id: string
+  region?: string
+  price?: string | number
+  config?: PriceConfig | null
+}
+
+export type PriceListResponse = ApiResponse<{
+  priceList?: {
+    price?: PriceRecord[]
+  }
+}>
+
+export interface PriceFormValues {
+  basedOn: 'SKN/HSN Code' | 'Product'
+  regionName: string
+  vendorType: string
+  company: string
+  productName: string
+  hsnCode: string
+  price: string
+}
+
 export interface StartDayPayload {
   is_vehicle: number
   lat: number
